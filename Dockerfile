@@ -1,13 +1,20 @@
-# Usamos PHP 8.2 con Apache
+# 1️⃣ Imagen base
 FROM php:8.2-apache
 
-# Instalar dependencias necesarias
+# 2️⃣ Instalar dependencias del sistema + extensiones PHP necesarias
 RUN apt-get update && apt-get install -y \
     git \
     unzip \
     libpq-dev \
-    && docker-php-ext-install pdo pdo_pgsql \
+    libzip-dev \
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    zip \
+    curl \
+    && docker-php-ext-install pdo pdo_pgsql mbstring exif pcntl bcmath gd zip \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
 
 # Copiar todo el proyecto al contenedor
 COPY . /var/www/html
