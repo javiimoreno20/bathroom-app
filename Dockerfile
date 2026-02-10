@@ -22,6 +22,10 @@ RUN composer install
 # Copiar archivo .env.example como .env (si no existe)
 RUN if [ ! -f /var/www/html/.env ]; then cp /var/www/html/.env.example /var/www/html/.env; fi
 
+ 7️⃣ Ejecutar migraciones y seeders **solo si quieres reiniciar la DB en cada deploy**
+# ⚠️ Solo usar migrate:fresh si no tienes datos importantes
+RUN php artisan migrate:fresh --seed
+
 # Exponer puerto 80
 EXPOSE 80
 
