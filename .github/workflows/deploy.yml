@@ -1,28 +1,20 @@
-name: Deploy Laravel
-
-on:
-  push:
-    branches: [ main ] # Asegúrate de que tu rama se llame main o cambia esto a master
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
+script: |
             cd www/
-            # Si es la primera vez, podrías necesitar clonar. 
-            # Si ya está allí, usamos pull:
-            [ -d ".git" ] && git pull origin main || git clone https://github.com/${{ github.repository }}.git .
+            # Si no hay un repositorio git, clona. Si lo hay, actualiza.
+            if [ ! -d ".git" ]; then
+              git clone https://github.com/${{ github.repository }}.git .
+            else
+              git pull origin main
+            fi
+            
+            # Instalación de dependencias
             composer install --no-dev --optimize-autoloader
-            php artisan migrate --force
-            php artisan config:cache
-            php artisan route:cache
+            
+            # Solo ejecutamos artisan si existe el archivo .env
+            if [ -f ".env" ]; then
+              php artisan migrate --force
+              php artisan config:cache
+              php artisan route:cache
+            else
+              echo "Aviso: El archivo .env no existe en el servidor. Saltando comandos de Artisan."
+            fi
