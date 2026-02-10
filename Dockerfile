@@ -1,5 +1,5 @@
-# 1️⃣ Base: PHP 8.2 + Apache
-FROM php:8.2-apache
+# 1️⃣ Base: PHP 8.3 + Apache (CAMBIADO)
+FROM php:8.3-apache
 
 # 2️⃣ Instalar dependencias de sistema y extensiones PHP necesarias para Laravel
 RUN apt-get update && apt-get install -y \
