@@ -1,4 +1,4 @@
-# 1️⃣ Imagen base PHP 8.2 + Apache
+# 1️⃣ Base: PHP 8.2 + Apache
 FROM php:8.2-apache
 
 # 2️⃣ Instalar dependencias de sistema y extensiones PHP necesarias para Laravel
@@ -12,10 +12,14 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     zip \
     curl \
+    gnupg2 \
+    libcurl4-openssl-dev \
+    pkg-config \
+    libssl-dev \
     && docker-php-ext-install pdo pdo_pgsql mbstring exif pcntl bcmath gd zip \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# 3️⃣ Copiar proyecto al contenedor
+# 3️⃣ Copiar todo el proyecto al contenedor
 COPY . /var/www/html
 
 # 4️⃣ Configurar permisos y habilitar mod_rewrite
@@ -25,16 +29,14 @@ RUN chown -R www-data:www-data /var/www/html \
 # 5️⃣ Copiar .env si no existe
 RUN if [ ! -f /var/www/html/.env ]; then cp /var/www/html/.env.example /var/www/html/.env; fi
 
-# 6️⃣ Instalar dependencias de Laravel
-# Añadimos memory_limit grande para evitar errores de Composer
+# 6️⃣ Instalar dependencias de Laravel con suficiente memoria
 RUN php -d memory_limit=-1 /usr/local/bin/composer install --no-interaction --optimize-autoloader
 
-# 7️⃣ Migraciones y seeders solo si quieres reiniciar DB
-# ⚠️ Solo usar migrate:fresh si no hay datos importantes
+# 7️⃣ Migraciones y seeders (opcional: solo si quieres reiniciar DB cada deploy)
 RUN php artisan migrate:fresh --seed
 
 # 8️⃣ Exponer puerto 80
 EXPOSE 80
 
-# 9️⃣ Iniciar Apache
+# 9️⃣ Arrancar Apache
 CMD ["apache2-foreground"]
