@@ -1,5 +1,5 @@
 <div>
     <x-app.layout>
-        <x-dashboard />
+        <x-dashboard :currentCount="$currentCount" :activePermissions="$activePermissions"/>
     </x-app.layout>
 </div>
