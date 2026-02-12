@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class TeacherSeeder extends Seeder
 {
@@ -17,7 +17,7 @@ class TeacherSeeder extends Seeder
         DB::table('teachers')->insert([
             'name' => 'javier',
             'email' => 'javiermm.04@gmail.com',
-            'password' => '1234',
+            'password' => Hash::make('1234'),
             'created_at' => now(),
             'updated_at' => now(),
         ]);
