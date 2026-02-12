@@ -3,9 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BathroomPermissionController;
 use App\Http\Controllers\AuthController;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
-    return view('welcome');
+    return Auth::check() ? redirect()->route('dashboard') : redirect()->route('login');
 });
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -15,7 +16,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [BathroomPermissionController::class, 'index'])->name('dashboard');
 
     Route::post('/give-permission', [BathroomPermissionController::class, 'givePermission'])->name('give.permission');
-    
+
     Route::post('/mark-returned/{id}', [BathroomPermissionController::class, 'markReturned'])->name('mark.returned');
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
