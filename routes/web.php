@@ -5,6 +5,7 @@ use App\Http\Controllers\BathroomPermissionController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Auth;
 
+//Cuando se inicia la app se redirige automáticamente al formulario de inicio de sesión o a la página de creación de permisos... según si está logueado o no.
 Route::get('/', function () {
     return Auth::check() ? redirect()->route('dashboard') : redirect()->route('login');
 });
