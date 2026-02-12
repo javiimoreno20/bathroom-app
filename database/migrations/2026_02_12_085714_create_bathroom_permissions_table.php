@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('bathroom_status', function (Blueprint $table) {
+        Schema::create('bathroom_permissions', function (Blueprint $table) {
             $table->id();
-            $table->integer('current_count')->default(0);
-            $table->integer('max_count')->default(5);
+            $table->foreignId('teacher_id')->constrained()->onDelete('cascade');
+            $table->timestamp('returned_at')->nullable();
             $table->timestamps();
         });
     }
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('bathroom_status');
+        Schema::dropIfExists('bathroom_permissions');
     }
 };
