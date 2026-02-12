@@ -1,20 +1,28 @@
-script: |
-            cd www/
-            # Si no hay un repositorio git, clona. Si lo hay, actualiza.
-            if [ ! -d ".git" ]; then
-              git clone https://github.com/${{ github.repository }}.git .
-            else
-              git pull origin main
-            fi
-            
-            # Instalación de dependencias
+name: Deploy to Alwaysdata
+
+on:
+  push:
+    branches: [ main ] # Cambia a 'master' si usas ese nombre
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          script: |
+            cd ~/www
+            git pull origin main
             composer install --no-dev --optimize-autoloader
-            
-            # Solo ejecutamos artisan si existe el archivo .env
-            if [ -f ".env" ]; then
-              php artisan migrate --force
-              php artisan config:cache
-              php artisan route:cache
-            else
-              echo "Aviso: El archivo .env no existe en el servidor. Saltando comandos de Artisan."
-            fi
+            php artisan migrate --force
+            php artisan config:clear
+            php artisan cache:clear
+            npm install
+            npm run build
