@@ -15,7 +15,7 @@ class TeacherSeeder extends Seeder
     {
         //
         DB::table('teachers')->insert([
-            'name' => 'javier',
+            'full_name' => 'javier',
             'email' => 'javiermm.04@gmail.com',
             'password' => Hash::make('1234'),
             'created_at' => now(),
