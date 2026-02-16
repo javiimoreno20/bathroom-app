@@ -15,7 +15,7 @@
         <input type="email" name="email" placeholder="Introduce tu correo corporativo" required><br><br>
 
         <label>Contraseña:</label>
-        <input type="password" name="password" placeholder="Correo Corporativo sin @g.educaand.es" required><br><br>
+        <input type="password" name="password" placeholder="Email sin @g.educaand.es" required><br><br>
 
         <button type="submit">Entrar</button>
     </form>

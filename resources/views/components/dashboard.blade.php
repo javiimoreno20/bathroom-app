@@ -33,22 +33,14 @@
                     <option value="{{ $alumn->id }}">{{ $alumn->full_name }}</option>
                 @endforeach
             </select>
+            <br>
+
+            <button type="submit" {{ $currentCount >= 5 ? 'disabled' : '' }}>
+                Dar permiso
+            </button>
         @else
             <p>Selecciona un Curso</p>
         @endif
-
-        <br>
-
-        <button type="submit" {{ $currentCount >= 5 ? 'disabled' : '' }}>
-            Dar permiso
-        </button>
-    </form>
-
-    <form method="POST" action="{{ route('logout') }}">
-        @csrf
-        <button type="submit">
-            Cerrar Sesión
-        </button>
     </form>
 
     <hr>
@@ -67,6 +59,8 @@
             </form>
         </div>
     @endforeach
+
+    <br>
 
     <form method="POST" action="{{ route('logout') }}">
         @csrf
