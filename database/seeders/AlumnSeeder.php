@@ -9,69 +9,81 @@ class AlumnSeeder extends Seeder
 {
     public function run(): void
     {
-        //Ruta del CSV.
         $path = database_path('data/students.csv');
 
-        //Si no encuentra el archivo lanza una excepción.
         if (!file_exists($path)) {
             throw new \Exception("El archivo CSV no existe en: {$path}");
         }
 
-        //Abre el archivo csv.
         $file = fopen($path, 'r');
-
-        //Leemos la cabecera.
         $header = fgetcsv($file);
 
-        //Arrays para almacenar datos en batch.
-        $studentsData = [];
-        $existingCourses = []; //Para no duplicar cursos.
+        $allRows = [];
+        $uniqueCourseNames = [];
 
-        //Tamaño establecido para guardar registros a la vez.
+        //Leemos todo el archivo primero para recolectar nombres de cursos.
+        while (($row = fgetcsv($file)) !== false) {
+            $rowData = array_combine($header, $row);
+            $courseName = trim($rowData['curso']);
+            
+            $allRows[] = $rowData;
+            if (!in_array($courseName, $uniqueCourseNames)) {
+                $uniqueCourseNames[] = $courseName;
+            }
+        }
+        fclose($file);
+
+        //ORDENAR LOS CURSOS (Lógica personalizada).
+        usort($uniqueCourseNames, function($a, $b) {
+
+            //Definimos prioridades de palabras clave.
+            $priorities = ['ESO' => 1, 'BACH' => 2, 'IF' => 3];
+            
+            $getPriority = function($name) use ($priorities) {
+                foreach ($priorities as $key => $p) {
+                    if (str_contains(strtoupper($name), $key)) return $p;
+                }
+                return 99;
+            };
+
+            $pA = $getPriority($a);
+            $pB = $getPriority($b);
+
+            if ($pA != $pB) return $pA <=> $pB; //Ordenar por ESO, luego BACH...
+            return $a <=> $b; //Si son del mismo tipo (ej. 1º ESO vs 2º ESO), orden alfabético.
+        });
+
+        //Insertar cursos ordenados y guardar sus IDs.
+        $courseMap = [];
+        foreach ($uniqueCourseNames as $name) {
+            $id = DB::table('courses')->insertGetId([
+                'name' => $name,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+            $courseMap[$name] = $id;
+        }
+
+        //Insertar alumnos usando el mapa de IDs.
+        $studentsData = [];
         $batchSize = 500;
 
-        //Iniciamos un bucle del que no saldrá hasta que no queden líneas en el csv.
-        while (($row = fgetcsv($file)) !== false) {
-
-
-            $rowData = array_combine($header, $row);
-
-            //Divide las columnas del csv entre nombre de alumno y curso.
-            $courseName = trim($rowData['curso']);
-            $studentName = trim($rowData['full_name']);
-
-            //Creamos el curso si no existe.
-            if (!isset($existingCourses[$courseName])) {
-                $courseId = DB::table('courses')->insertGetId([
-                    'name' => $courseName,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
-
-                $existingCourses[$courseName] = $courseId;
-            }
-
-            //Añadimos el alumno al array de batch.
+        foreach ($allRows as $rowData) {
             $studentsData[] = [
-                'full_name' => $studentName,
-                'course_id' => $existingCourses[$courseName],
+                'full_name' => trim($rowData['full_name']),
+                'course_id' => $courseMap[trim($rowData['curso'])],
                 'created_at' => now(),
                 'updated_at' => now(),
             ];
 
-            //Inserción por batch.
             if (count($studentsData) === $batchSize) {
                 DB::table('alumns')->insert($studentsData);
                 $studentsData = [];
             }
         }
 
-        //Insertar los que queden.
         if (!empty($studentsData)) {
             DB::table('alumns')->insert($studentsData);
         }
-
-        //Cerramos el archivo csv.
-        fclose($file);
     }
 }
