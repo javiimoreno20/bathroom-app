@@ -56,7 +56,7 @@
     @foreach($activePermissions as $permission)
         <div style="margin-bottom: 10px;">
             Profesor: {{ $permission->teacher->full_name }}
-            Alumno: {{ $alumn->full_name }}
+            Alumno: {{ $permission->alumn?->full_name ?? 'Sin alumno' }}
             | Salió hace: {{ $permission->created_at->diffForHumans() }}
 
             <form method="POST" action="{{ route('mark.returned', $permission->id) }}" style="display:inline;">
