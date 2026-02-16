@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('bathroom_permissions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('teacher_id')->constrained()->onDelete('cascade');
+            $table->foreignId('alumn_id')->constrained()->onDelete('cascade');
             $table->timestamp('returned_at')->nullable();
             $table->timestamps();
         });
