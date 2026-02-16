@@ -35,7 +35,7 @@ class BathroomPermissionController extends Controller
         }
 
         //Devuelve una vista enviándole la información de la cantidad de permisos activos actualmente y la información de cada permiso con la id del profesor que ha creado dicho permiso.
-        return view('dashboard', compact('currentCount', 'activePermissions', 'courses', 'alumns'));
+        return view('dashboard', compact('currentCount', 'activePermissions', 'courses', 'alumns', 'courseId'));
     }
 
     public function givePermission(Request $request) {
