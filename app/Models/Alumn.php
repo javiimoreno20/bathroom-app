@@ -16,4 +16,8 @@ class Alumn extends Model
         return $this->belongsTo(Course::class);
     }
 
+    public function bathroomPermissions() {
+        return $this->hasMany(BathroomPermission::class);
+    }
+
 }

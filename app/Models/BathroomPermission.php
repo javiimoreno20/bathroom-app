@@ -14,11 +14,16 @@ class BathroomPermission extends Model
     //Permite cambios en los campos añadidos.
     protected $fillable = [
         'teacher_id',
+        'alumn_id',
         'returned_at'
     ];
 
     //Establece la relación entre las tablas.
     public function teacher() {
         return $this->belongsTo(Teacher::class);
+    }
+
+    public function alumn() {
+        return $this->belongsTo(Alumn::class);
     }
 }
