@@ -40,7 +40,7 @@
         </button>
     </form>
 
-    <form method="POST" action="{{ route('mark.returned') }}">
+    <form method="POST" action="{{ route('mark.returned', Auth::id() }}">
         @csrf
         <button type="submit">
             Cerrar Sesión
