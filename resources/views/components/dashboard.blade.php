@@ -37,15 +37,10 @@
             <p>Selecciona un Curso</p>
         @endif
 
+        <br>
+        
         <button type="submit" {{ $currentCount >= 5 ? 'disabled' : '' }}>
             Dar permiso
-        </button>
-    </form>
-
-    <form method="POST" action="{{ route('mark.returned', Auth::id()) }}">
-        @csrf
-        <button type="submit">
-            Cerrar Sesión
         </button>
     </form>
 
