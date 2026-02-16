@@ -28,7 +28,7 @@ class BathroomPermissionController extends Controller
 
         $alumns = collect();
 
-        $courseId = $request->course_id;
+        $courseId = $request->course_id ?? null;
         
         if ($request->filled('course_id')) {
             $alumns = Alumn::where('course_id', $courseId)->get();

@@ -14,7 +14,9 @@
     <form method="GET" action="{{ route('dashboard') }}">
         <select name="course_id">
             @foreach($courses as $course)
-                <option value="{{ $course->id }}">{{ $course->name }}</option>
+                <option value="{{ $course->id }}" {{ $courseId == $course->id ? 'selected' : '' }}>
+                    {{ $course->name }}
+                </option>
             @endforeach
         </select>
         <button type="submit">
