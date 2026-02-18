@@ -34,9 +34,35 @@ class importController extends Controller
             return back()->with('error', 'No se pudo abrir el archivo CSV.');
         }
 
-        $header = fgetcsv($handle);
+        $firstLine = fgets($handle);
+        rewind($handle);
+
+        $delimiters = [',', ';', "\t", ' ']; // comas, punto y coma, tab, espacio
+        $delimiter = null;
+        foreach ($delimiters as $d) {
+            if (substr_count($firstLine, $d) > 0) {
+                $delimiter = $d;
+                break;
+            }
+        }
+
+        if (!$delimiter) $delimiter = ',';
+
+        $header = fgetcsv($handle, 0, $delimiter);
+        $header = array_map('trim', $header);
+
         $rows = [];
-        while (($data = fgetcsv($handle)) !== false) {
+        while (($data = fgetcsv($handle, 0, $delimiter)) !== false) {
+            // Si el número de columnas no coincide con el header
+            if (count($data) != count($header)) {
+                // asumir que full_name ocupa todos los primeros campos
+                $emailIndex = count($data) - 3; // email, password, is_admin
+                $fullName = implode(' ', array_slice($data, 0, $emailIndex));
+                $email = $data[$emailIndex];
+                $password = $data[$emailIndex + 1];
+                $isAdmin = $data[$emailIndex + 2];
+                $data = [$fullName, $email, $password, $isAdmin];
+            }
             $rows[] = array_combine($header, $data);
         }
         fclose($handle);
