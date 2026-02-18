@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BathroomPermissionController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Admin\ImportController;
 
 //Cuando se inicia la app se redirige automáticamente al formulario de inicio de sesión o a la página de creación de permisos... según si está logueado o no.
 Route::get('/', function () {
@@ -22,3 +23,13 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
+
+Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
+
+    Route::get('/importTeachers', [ImportController::class, 'showTeachersForm'])->name('importTeachersForm');
+
+    Route::get('/importAlumns', [ImportController::class, 'showAlumnsForm'])->name('importAlumnsForm');
+
+    Route::post('/import/{type}', [ImportController::class, 'import'])->name('import');
+});
+

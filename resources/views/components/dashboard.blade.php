@@ -62,6 +62,18 @@
 
     <br>
 
+    @if(Auth::user() && Auth::user()->is_admin)
+        <a href="{{ route('importTeachersForm') }}" class="btn btn-primary">
+            Importar Profesores
+        </a>
+
+        <a href="{{ route('importAlumnsForm') }}" class="btn btn-primary">
+            Importar Alumnos
+        </a>
+    @endif
+
+    <br>
+
     <form method="POST" action="{{ route('logout') }}">
         @csrf
         <button type="submit">
