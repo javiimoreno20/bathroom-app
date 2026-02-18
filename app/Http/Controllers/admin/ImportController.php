@@ -23,7 +23,7 @@ class importController extends Controller
     public function import(Request $request, $type) {
         // Validación del archivo CSV
         $request->validate([
-            'csv_file' => 'required|file|mimes:csv,txt',
+            'csv_file' => 'required|file|mimes:csv,txt,ods',
         ]);
 
         $file = $request->file('csv_file');
