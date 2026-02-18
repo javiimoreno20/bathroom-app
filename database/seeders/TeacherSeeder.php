@@ -54,7 +54,7 @@ class TeacherSeeder extends Seeder
                 'full_name' => $full_name,
                 'email' => $email,
                 'password' => Hash::make($password),
-                'is_admin' => isset($rowData['is_admin']) ? (bool)$row['is_admin'] : false,
+                'is_admin' => !empty($rowData['is_admin'] ?? false),
                 'created_at' => now(),
                 'updated_at' => now(),
             ];
