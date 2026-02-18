@@ -53,7 +53,7 @@ class importController extends Controller
                         [
                             'full_name' => trim($row['full_name']),
                             'password' => Hash::make(trim($row['password'])),
-                            'is_admin' => isset($row['is_admin']) ? (bool)$row['is_admin'] : false,
+                            'is_admin' => !empty($row['is_admin'] ?? false),
                             'created_at' => now(),
                             'updated_at' => now(),
                         ]
