@@ -17,12 +17,8 @@ class importController extends Controller
         return view('importTeachers');
     }
 
-    public function showAlumnsForm() {
-        return view('importAlumns');
-    }
-
     public function import(Request $request, $type) {
-        dd(Auth::user());
+        //dd(Auth::user());
         // Validación del archivo CSV
         $request->validate([
             'csv_file' => 'required|file|mimes:csv,txt,ods',
@@ -85,77 +81,91 @@ class importController extends Controller
         }
         fclose($handle);
 
-        DB::transaction(function () use ($rows, $type) {
+        // ===== Añadido: captura de errores y logging =====
+        try {
+            DB::transaction(function () use ($rows, $type) {
 
-            if ($type === 'teachers') {
-                // Sobrescribir todo
-                DB::table('teachers')->truncate();
+                if ($type === 'teachers') {
+                    // Sobrescribir todo
+                    DB::table('teachers')->truncate();
 
-                foreach ($rows as $row) {
-                    Teacher::updateOrCreate(
-                        ['email' => trim($row['email'])],
-                        [
-                            'full_name' => trim($row['full_name']),
-                            'password' => Hash::make(trim($row['password'])),
-                            'is_admin' => !empty($row['is_admin'] ?? false),
+                    foreach ($rows as $row) {
+                        // Log de cada fila para debug
+                        logger('Importando teacher', $row);
+
+                        Teacher::updateOrCreate(
+                            ['email' => trim($row['email'])],
+                            [
+                                'full_name' => trim($row['full_name']),
+                                'password' => Hash::make(trim($row['password'])),
+                                'is_admin' => !empty($row['is_admin'] ?? false),
+                                'created_at' => now(),
+                                'updated_at' => now(),
+                            ]
+                        );
+                    }
+
+                } elseif ($type === 'alumns') {
+                    // Sobrescribir todo
+                    DB::table('alumns')->truncate();
+                    DB::table('courses')->truncate();
+
+                    // Obtener cursos únicos
+                    $uniqueCourses = [];
+                    foreach ($rows as $row) {
+                        $courseName = trim($row['curso']);
+                        if (!in_array($courseName, $uniqueCourses)) {
+                            $uniqueCourses[] = $courseName;
+                        }
+                    }
+
+                    // Ordenar cursos según tu lógica personalizada
+                    usort($uniqueCourses, function($a, $b) {
+                        $priorities = ['ESO' => 1, 'BACH' => 2, 'IF' => 3];
+                        $getPriority = function($name) use ($priorities) {
+                            foreach ($priorities as $key => $p) {
+                                if (str_contains(strtoupper($name), $key)) return $p;
+                            }
+                            return 99;
+                        };
+                        $pA = $getPriority($a);
+                        $pB = $getPriority($b);
+                        if ($pA != $pB) return $pA <=> $pB;
+                        return $a <=> $b;
+                    });
+
+                    // Insertar cursos y crear mapa de IDs
+                    $courseMap = [];
+                    foreach ($uniqueCourses as $name) {
+                        $courseMap[$name] = DB::table('courses')->insertGetId([
+                            'name' => $name,
                             'created_at' => now(),
                             'updated_at' => now(),
-                        ]
-                    );
-                }
+                        ]);
+                    }
 
-            } elseif ($type === 'alumns') {
-                // Sobrescribir todo
-                DB::table('alumns')->truncate();
-                DB::table('courses')->truncate();
+                    // Insertar alumnos
+                    foreach ($rows as $row) {
+                        // Log de cada fila para debug
+                        logger('Importando alumno', $row);
 
-                // Obtener cursos únicos
-                $uniqueCourses = [];
-                foreach ($rows as $row) {
-                    $courseName = trim($row['curso']);
-                    if (!in_array($courseName, $uniqueCourses)) {
-                        $uniqueCourses[] = $courseName;
+                        Alumn::create([
+                            'full_name' => trim($row['full_name']),
+                            'course_id' => $courseMap[trim($row['curso'])],
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ]);
                     }
                 }
 
-                // Ordenar cursos según tu lógica personalizada
-                usort($uniqueCourses, function($a, $b) {
-                    $priorities = ['ESO' => 1, 'BACH' => 2, 'IF' => 3];
-                    $getPriority = function($name) use ($priorities) {
-                        foreach ($priorities as $key => $p) {
-                            if (str_contains(strtoupper($name), $key)) return $p;
-                        }
-                        return 99;
-                    };
-                    $pA = $getPriority($a);
-                    $pB = $getPriority($b);
-                    if ($pA != $pB) return $pA <=> $pB;
-                    return $a <=> $b;
-                });
-
-                // Insertar cursos y crear mapa de IDs
-                $courseMap = [];
-                foreach ($uniqueCourses as $name) {
-                    $courseMap[$name] = DB::table('courses')->insertGetId([
-                        'name' => $name,
-                        'created_at' => now(),
-                        'updated_at' => now(),
-                    ]);
-                }
-
-                // Insertar alumnos
-                foreach ($rows as $row) {
-                    Alumn::create([
-                        'full_name' => trim($row['full_name']),
-                        'course_id' => $courseMap[trim($row['curso'])],
-                        'created_at' => now(),
-                        'updated_at' => now(),
-                    ]);
-                }
-            }
-
-        }); // fin de la transacción
+            });
+        } catch (\Exception $e) {
+            // Log del error completo
+            logger('Error al importar CSV', ['message' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
+            return back()->with('error', 'Ocurrió un error al importar el CSV: '.$e->getMessage());
+        }
 
         return back()->with('success', 'Importación completada correctamente.');
     }
+
 }
