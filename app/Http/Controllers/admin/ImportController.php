@@ -52,18 +52,34 @@ class importController extends Controller
         $header = array_map('trim', $header);
 
         $rows = [];
-        while (($data = fgetcsv($handle, 0, $delimiter)) !== false) {
-            // Si el número de columnas no coincide con el header
-            if (count($data) != count($header)) {
-                // asumir que full_name ocupa todos los primeros campos
-                $emailIndex = count($data) - 3; // email, password, is_admin
-                $fullName = implode(' ', array_slice($data, 0, $emailIndex));
-                $email = $data[$emailIndex];
-                $password = $data[$emailIndex + 1];
-                $isAdmin = $data[$emailIndex + 2];
-                $data = [$fullName, $email, $password, $isAdmin];
+        while (($line = fgets($handle)) !== false) {
+            $line = trim($line);
+            if ($line === '') continue;
+
+            // Separar por espacios
+            $parts = preg_split('/\s+/', $line);
+
+            // Buscar email
+            $emailIndex = null;
+            foreach ($parts as $i => $part) {
+                if (filter_var($part, FILTER_VALIDATE_EMAIL)) {
+                    $emailIndex = $i;
+                    break;
+                }
             }
-            $rows[] = array_combine($header, $data);
+            if ($emailIndex === null) continue; // saltar línea si no hay email
+
+            $fullName = implode(' ', array_slice($parts, 0, $emailIndex));
+            $email = $parts[$emailIndex];
+            $password = $parts[$emailIndex + 1] ?? '';
+            $isAdmin = $parts[$emailIndex + 2] ?? '0';
+
+            $rows[] = [
+                'full_name' => $fullName,
+                'email' => $email,
+                'password' => $password,
+                'is_admin' => $isAdmin
+            ];
         }
         fclose($handle);
 
