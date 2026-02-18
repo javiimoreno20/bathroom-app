@@ -8,6 +8,7 @@ use App\Models\Alumn;
 use App\Models\Teacher;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class importController extends Controller
 {
@@ -21,6 +22,7 @@ class importController extends Controller
     }
 
     public function import(Request $request, $type) {
+        dd(Auth::user());
         // Validación del archivo CSV
         $request->validate([
             'csv_file' => 'required|file|mimes:csv,txt,ods',
