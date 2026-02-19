@@ -63,19 +63,7 @@
     <br>
 
     @if(Auth::user() && Auth::user()->is_admin)
-        <hr>
-        <h2>Importaciones masivas</h2>
-        <p>Importa los datos directamente desde Google Sheets.</p>
-
-        <form action="{{ route('import', ['type' => 'teachers']) }}" method="POST" style="display:inline-block;">
-            @csrf
-            <button type="submit">Importar Teachers</button>
-        </form>
-
-        <form action="{{ route('import', ['type' => 'alumns']) }}" method="POST" style="display:inline-block; margin-left:10px;">
-            @csrf
-            <button type="submit">Importar Alumnos</button>
-        </form>
+        
     @endif
 
     <br>
