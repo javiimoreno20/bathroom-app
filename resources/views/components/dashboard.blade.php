@@ -62,12 +62,6 @@
 
     <br>
 
-    @if(Auth::user() && Auth::user()->is_admin)
-        
-    @endif
-
-    <br>
-
     <form method="POST" action="{{ route('logout') }}">
         @csrf
         <button type="submit">
