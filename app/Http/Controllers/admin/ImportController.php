@@ -13,10 +13,6 @@ use App\Services\GoogleSheetsService;
 class importController extends Controller
 {
     //
-    public function showTeachersForm() {
-        return view('importTeachers');
-    }
-
     public function import(Request $request, $type) {
 
         $sheetService = new GoogleSheetsService();

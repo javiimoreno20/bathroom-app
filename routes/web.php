@@ -25,11 +25,6 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth'])->prefix('admin')->group(function () {
-
-    Route::get('/importTeachers', [ImportController::class, 'showTeachersForm'])->name('importTeachersForm');
-
-    Route::get('/importAlumns', [ImportController::class, 'showAlumnsForm'])->name('importAlumnsForm');
-
     Route::post('/import/{type}', [ImportController::class, 'import'])->name('import');
 });
 
