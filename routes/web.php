@@ -28,3 +28,15 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::post('/import/{type}', [ImportController::class, 'import'])->name('import');
 });
 
+// routes/web.php
+use Illuminate\Support\Facades\Artisan;
+
+Route::get('/clear-cache-temp', function() {
+    Artisan::call('view:clear');
+    Artisan::call('cache:clear');
+    Artisan::call('config:clear');
+    Artisan::call('optimize:clear');
+    return "¡Caché de Laravel limpiada!";
+});
+
+
