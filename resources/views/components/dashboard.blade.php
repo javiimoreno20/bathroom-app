@@ -39,7 +39,7 @@
                 Dar permiso
             </button>
         @else
-            <p>Selecciona un Curso</p>
+            <p>Selecciona un Curso:</p>
         @endif
     </form>
 
