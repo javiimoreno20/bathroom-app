@@ -14,9 +14,10 @@ class Teacher extends Authenticatable
 
     //Permite cambios en los campos añadidos.
     protected $fillable = [
-        'name',
+        'full_name',
         'email',
-        'password'
+        'password',
+        'is_admin'
     ];
 
     //Los campos añadidos se quedan ocultos.
