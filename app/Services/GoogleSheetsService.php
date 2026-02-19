@@ -18,17 +18,23 @@ class GoogleSheetsService
         $this->service = new Sheets($this->client);
     }
 
-    public function getSheetData($spreadsheetId, $range)
-    {
+    public function getSheetData($spreadsheetId, $range) {
         $response = $this->service->spreadsheets_values->get($spreadsheetId, $range);
         $values = $response->getValues();
+        
         if (empty($values)) return [];
-        // Convertimos la primera fila en headers
+
+        // 1. Limpiamos la cabecera y contamos cuántas columnas DEBE haber
         $header = array_map('trim', $values[0]);
+        $columnCount = count($header);
+        
         $data = [];
         for ($i = 1; $i < count($values); $i++) {
             $row = $values[$i];
-            $data[] = array_combine($header, $row);
+
+            $fullRow = array_slice(array_pad($row, $columnCount, ''), 0, $columnCount);
+
+            $data[] = array_combine($header, $fullRow);
         }
         return $data;
     }
