@@ -8,7 +8,7 @@ use App\Models\Alumn;
 use App\Models\Teacher;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
+use App\Services\GoogleSheetsService;
 
 class importController extends Controller
 {
@@ -18,79 +18,30 @@ class importController extends Controller
     }
 
     public function import(Request $request, $type) {
-        //dd(Auth::user());
-        // Validación del archivo CSV
-        $request->validate([
-            'csv_file' => 'required|file|mimes:csv,txt,ods',
-        ]);
 
-        $file = $request->file('csv_file');
-        $path = $file->getRealPath();
-        $handle = fopen($path, 'r');
+        $sheetService = new GoogleSheetsService();
 
-        if (!$handle) {
-            return back()->with('error', 'No se pudo abrir el archivo CSV.');
+        // ⚠️ Pega aquí el ID real de tu Google Sheet
+        $spreadsheetId = '16IT-sjzeoA1-Is2gH94N0YJTPLvZfJmDRq4Vvs0yBcc';
+
+        // Leer datos desde Google Sheets según el tipo
+        if ($type === 'teachers') {
+            $rows = $sheetService->getSheetData($spreadsheetId, 'teachers!A:D');
+        } elseif ($type === 'alumns') {
+            $rows = $sheetService->getSheetData($spreadsheetId, 'alumns!A:B');
+        } else {
+            return back()->with('error', 'Tipo de importación no válido.');
         }
 
-        $firstLine = fgets($handle);
-        rewind($handle);
-
-        $delimiters = [',', ';', "\t", ' ']; // comas, punto y coma, tab, espacio
-        $delimiter = null;
-        foreach ($delimiters as $d) {
-            if (substr_count($firstLine, $d) > 0) {
-                $delimiter = $d;
-                break;
-            }
-        }
-
-        if (!$delimiter) $delimiter = ',';
-
-        $header = fgetcsv($handle, 0, $delimiter);
-        $header = array_map('trim', $header);
-
-        $rows = [];
-        while (($line = fgets($handle)) !== false) {
-            $line = trim($line);
-            if ($line === '') continue;
-
-            // Separar por espacios
-            $parts = preg_split('/\s+/', $line);
-
-            // Buscar email
-            $emailIndex = null;
-            foreach ($parts as $i => $part) {
-                if (filter_var($part, FILTER_VALIDATE_EMAIL)) {
-                    $emailIndex = $i;
-                    break;
-                }
-            }
-            if ($emailIndex === null) continue; // saltar línea si no hay email
-
-            $fullName = implode(' ', array_slice($parts, 0, $emailIndex));
-            $email = $parts[$emailIndex];
-            $password = $parts[$emailIndex + 1] ?? '';
-            $isAdmin = $parts[$emailIndex + 2] ?? '0';
-
-            $rows[] = [
-                'full_name' => $fullName,
-                'email' => $email,
-                'password' => $password,
-                'is_admin' => $isAdmin
-            ];
-        }
-        fclose($handle);
-
-        // ===== Añadido: captura de errores y logging =====
         try {
             DB::transaction(function () use ($rows, $type) {
 
                 if ($type === 'teachers') {
-                    // Sobrescribir todo
+
                     DB::table('teachers')->truncate();
 
                     foreach ($rows as $row) {
-                        // Log de cada fila para debug
+
                         logger('Importando teacher', $row);
 
                         Teacher::updateOrCreate(
@@ -106,20 +57,19 @@ class importController extends Controller
                     }
 
                 } elseif ($type === 'alumns') {
-                    // Sobrescribir todo
+
                     DB::table('alumns')->truncate();
                     DB::table('courses')->truncate();
 
-                    // Obtener cursos únicos
                     $uniqueCourses = [];
+
                     foreach ($rows as $row) {
-                        $courseName = trim($row['curso']);
-                        if (!in_array($courseName, $uniqueCourses)) {
+                        $courseName = trim($row['curso'] ?? '');
+                        if ($courseName && !in_array($courseName, $uniqueCourses)) {
                             $uniqueCourses[] = $courseName;
                         }
                     }
 
-                    // Ordenar cursos según tu lógica personalizada
                     usort($uniqueCourses, function($a, $b) {
                         $priorities = ['ESO' => 1, 'BACH' => 2, 'IF' => 3];
                         $getPriority = function($name) use ($priorities) {
@@ -134,8 +84,8 @@ class importController extends Controller
                         return $a <=> $b;
                     });
 
-                    // Insertar cursos y crear mapa de IDs
                     $courseMap = [];
+
                     foreach ($uniqueCourses as $name) {
                         $courseMap[$name] = DB::table('courses')->insertGetId([
                             'name' => $name,
@@ -144,14 +94,19 @@ class importController extends Controller
                         ]);
                     }
 
-                    // Insertar alumnos
                     foreach ($rows as $row) {
-                        // Log de cada fila para debug
+
                         logger('Importando alumno', $row);
+
+                        $courseName = trim($row['curso'] ?? '');
+
+                        if (!$courseName || !isset($courseMap[$courseName])) {
+                            continue;
+                        }
 
                         Alumn::create([
                             'full_name' => trim($row['full_name']),
-                            'course_id' => $courseMap[trim($row['curso'])],
+                            'course_id' => $courseMap[$courseName],
                             'created_at' => now(),
                             'updated_at' => now(),
                         ]);
@@ -159,13 +114,18 @@ class importController extends Controller
                 }
 
             });
+
         } catch (\Exception $e) {
-            // Log del error completo
-            logger('Error al importar CSV', ['message' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
-            return back()->with('error', 'Ocurrió un error al importar el CSV: '.$e->getMessage());
+
+            logger('Error al importar desde Google Sheets', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return back()->with('error', 'Error al importar desde Google Sheets: '.$e->getMessage());
         }
 
-        return back()->with('success', 'Importación completada correctamente.');
+        return back()->with('success', 'Importación desde Google Sheets completada correctamente.');
     }
 
 }
