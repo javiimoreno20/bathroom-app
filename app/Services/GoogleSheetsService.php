@@ -13,7 +13,7 @@ class GoogleSheetsService
     public function __construct()
     {
         $this->client = new Client();
-        $this->client->setAuthConfig(storage_path('app/laravel-google.json'));
+        $this->client->setAuthConfig(storage_path('app/institutoimport-a87b3220723c.json'));
         $this->client->addScope(Sheets::SPREADSHEETS_READONLY);
         $this->service = new Sheets($this->client);
     }
