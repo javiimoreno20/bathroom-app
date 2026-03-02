@@ -27,7 +27,7 @@ class AlumnController extends Controller
 
         $courses = Course::all();
 
-        return view('alumns', compact('alumns', 'courses', 'courseId'));
+        return view('Alumns.index', compact('alumns', 'courses', 'courseId'));
     }
 
     /**
@@ -35,7 +35,7 @@ class AlumnController extends Controller
      */
     public function create(): View
     {
-        return view('createAlumn', [
+        return view('Alumns.create', [
             'courses' => Course::all()
         ]);
     }
@@ -59,7 +59,7 @@ class AlumnController extends Controller
      */
     public function edit(string $id): View
     {
-        return view('editAlumn', [
+        return view('Alumns.edit', [
             'alumn' => Alumn::findOrFail($id),
             'courses' => Course::all()
         ]);

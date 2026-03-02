@@ -15,8 +15,8 @@ class TeacherController extends Controller
     public function index(): View
     {
         //
-        return view('teachers', [
-            'teachers' => Teacher::with('course')->get(),
+        return view('Teachers.index', [
+            'teachers' => Teacher::all(),
         ]);
     }
 
@@ -26,7 +26,7 @@ class TeacherController extends Controller
     public function create(): View
     {
         //
-        return view('createTeacher');
+        return view('Teachers.create');
     }
 
     /**
@@ -49,7 +49,7 @@ class TeacherController extends Controller
     public function edit(string $id): View
     {
         //
-        return view('editTeacher', [
+        return view('Teachers.edit', [
             'teacher' => Teacher::findOrFail($id),
         ]);
     }
