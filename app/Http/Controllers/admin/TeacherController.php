@@ -4,23 +4,29 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
+use App\Models\Teacher;
 
 class TeacherController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): View
     {
         //
+        return view('teachers', [
+            'teachers' => Teacher::with('course')->get(),
+        ]);
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): View
     {
         //
+        return view('createTeacher');
     }
 
     /**
@@ -29,14 +35,23 @@ class TeacherController extends Controller
     public function store(Request $request)
     {
         //
+        $request->validate([
+            'full_name' => 'required|string|max:255',
+            'email' => 'required|unique:teachers,email|string|max:255',
+        ]);
+        Teacher::create($request->all());
+        return redirect()->route('teachers.index');
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(string $id): View
     {
         //
+        return view('editTeacher', [
+            'teacher' => Teacher::findOrFail($id),
+        ]);
     }
 
     /**
@@ -45,6 +60,13 @@ class TeacherController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        $request->validate([
+            'full_name' => 'required|string|max:255',
+            'email' => 'required|unique:teachers,email,' . $id . '|string|max:255',
+        ]);
+        $teacher = Teacher::findOrFail($id);
+        $teacher->update($request->all());
+        return redirect()->route('teachers.index');
     }
 
     /**
@@ -53,5 +75,8 @@ class TeacherController extends Controller
     public function destroy(string $id)
     {
         //
+        $teacher = Teacher::findOrFail($id);
+        $teacher->delete();
+        return redirect()->route('teachers.index');
     }
 }

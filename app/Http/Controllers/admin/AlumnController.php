@@ -4,23 +4,40 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Alumn;
+use App\Models\Course;
+use Illuminate\View\View;
 
 class AlumnController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $courseId = $request->course_id;
+
+        $query = Alumn::with('course');
+
+        if ($courseId) {
+            $query->where('course_id', $courseId);
+        }
+
+        $alumns = $query->paginate(20); // Paginación, 20 por página
+
+        $courses = Course::all();
+
+        return view('alumns', compact('alumns', 'courses', 'courseId'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): View
     {
-        //
+        return view('createAlumn', [
+            'courses' => Course::all()
+        ]);
     }
 
     /**
@@ -29,14 +46,23 @@ class AlumnController extends Controller
     public function store(Request $request)
     {
         //
+        $request->validate([
+            'full_name' => 'required|string|max:255',
+            'course_id' => 'required|string|max:255',
+        ]);
+        Alumn::create($request->all());
+        return redirect()->route('alumns.index');
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(string $id): View
     {
-        //
+        return view('editAlumn', [
+            'alumn' => Alumn::findOrFail($id),
+            'courses' => Course::all()
+        ]);
     }
 
     /**
@@ -45,6 +71,13 @@ class AlumnController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        $request->validate([
+            'full_name' => 'required|string|max:255',
+            'course_id' => 'required|string|max:255',
+        ]);
+        $alumn = Alumn::findOrFail($id);
+        $alumn->update($request->all());
+        return redirect()->route('alumns.index');
     }
 
     /**
@@ -53,5 +86,8 @@ class AlumnController extends Controller
     public function destroy(string $id)
     {
         //
+        $alumn = Alumn::findOrFail($id);
+        $alumn->delete();
+        return redirect()->route('alumns.index');
     }
 }
