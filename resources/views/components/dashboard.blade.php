@@ -76,6 +76,16 @@
             @csrf
             <button type="submit">Importar Alumnos</button>
         </form>
+        <br><br>
+        <!-- NUEVOS BOTONES -->
+         <h2>Edición Individual</h2>
+        <a href="{{ route('teachers.index') }}">
+            <button type="button">Ver Profesores</button>
+        </a>
+
+        <a href="{{ route('alumns.index') }}" style="margin-left:10px;">
+            <button type="button">Ver Alumnos</button>
+        </a>
     @endif
 
     <br>
