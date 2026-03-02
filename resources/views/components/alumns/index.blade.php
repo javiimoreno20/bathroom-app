@@ -1,4 +1,6 @@
 <div>
+    @props(['alumns', 'courses', 'courseId'])
+
     <h1>Lista de Alumnos</h1>
 
     <a href="{{ route('alumns.create') }}">Crear nuevo alumno</a>

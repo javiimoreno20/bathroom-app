@@ -1,4 +1,6 @@
 <div>
+    @props(['courses'])
+
     <h1>Crear Alumno</h1>
 
     <form action="{{ route('alumns.store') }}" method="POST">

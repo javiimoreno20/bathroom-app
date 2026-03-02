@@ -1,4 +1,6 @@
 <div>
+    @props(['teacher'])
+
     <h1>Editar Profesor</h1>
 
     <form action="{{ route('teachers.update', $teacher->id) }}" method="POST">

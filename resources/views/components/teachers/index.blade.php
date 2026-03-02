@@ -1,4 +1,6 @@
 <div>
+    @props(['teachers'])
+
     <h1>Lista de Profesores</h1>
 
     <a href="{{ route('teachers.create') }}">Crear nuevo profesor</a>
