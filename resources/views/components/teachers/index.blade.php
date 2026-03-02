@@ -3,7 +3,9 @@
 
     <h1>Lista de Profesores</h1>
 
-    <a href="{{ route('teachers.create') }}">Crear nuevo profesor</a>
+    <a href="{{ route('teachers.create') }}">
+        <button type="button">Crear nuevo profesor</button>
+    </a>
 
     <br><br>
 
@@ -23,7 +25,9 @@
                     <td>{{ $teacher->full_name }}</td>
                     <td>{{ $teacher->email }}</td>
                     <td>
-                        <a href="{{ route('teachers.edit', $teacher->id) }}">Editar</a>
+                        <a href="{{ route('teachers.edit', $teacher->id) }}">
+                            <button type="button">Editar</button>
+                        </a>
 
                         <form action="{{ route('teachers.destroy', $teacher->id) }}" 
                               method="POST">

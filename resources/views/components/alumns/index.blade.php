@@ -3,7 +3,9 @@
 
     <h1>Lista de Alumnos</h1>
 
-    <a href="{{ route('alumns.create') }}">Crear nuevo alumno</a>
+    <a href="{{ route('alumns.create') }}">
+        <button type="button">Crear nuevo alumno</button>
+    </a>
 
     <br><br>
 
@@ -40,7 +42,9 @@
                     <td>{{ $alumn->full_name }}</td>
                     <td>{{ $alumn->course->name ?? 'Sin curso' }}</td>
                     <td>
-                        <a href="{{ route('alumns.edit', $alumn->id) }}">Editar</a>
+                        <a href="{{ route('alumns.edit', $alumn->id) }}">
+                            <button type="button">Editar</button>
+                        </a>
 
                         <form action="{{ route('alumns.destroy', $alumn->id) }}" 
                               method="POST">
@@ -55,6 +59,4 @@
     </table>
 
     <br>
-
-    {{ $alumns->withQueryString()->links() }}
 </div>

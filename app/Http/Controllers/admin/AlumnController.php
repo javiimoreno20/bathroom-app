@@ -23,7 +23,7 @@ class AlumnController extends Controller
             $query->where('course_id', $courseId);
         }
 
-        $alumns = $query->paginate(20); // Paginación, 20 por página
+        $alumns = $query->get();
 
         $courses = Course::all();
 
