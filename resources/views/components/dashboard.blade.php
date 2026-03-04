@@ -61,10 +61,8 @@
     @endforeach
 
     <br>
-    <pre>{{ var_dump(session('profesor')) }}</pre>
 
-    @if(session()->has('teacher') && session('teacher')->is_admin)
-        <pre>{{ var_dump(session('profesor')) }}</pre>
+    @if(session()->has('profesor') && session('profesor')->is_admin)
         <hr>
         <h2>Importaciones masivas</h2>
         <p>Importa los datos directamente desde Google Sheets.</p>

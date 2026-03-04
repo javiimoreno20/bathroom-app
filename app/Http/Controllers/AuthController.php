@@ -51,7 +51,7 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         // Borrar sesión del profesor
-        session()->forget('profesor_id');
+        session()->forget('profesor');
 
         // Invalidar sesión actual
         $request->session()->invalidate();
