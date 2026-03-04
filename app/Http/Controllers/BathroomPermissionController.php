@@ -65,11 +65,13 @@ class BathroomPermissionController extends Controller
     }
 
     public function markReturned($id) {
+        $profesor = session('profesor'); // trae el profesor de la sesión
+        
         //Guarda en una variable un permiso con la id solicitada.
         $permission = BathroomPermission::findOrFail($id);
 
         //Compara si el profesor logueado que esta intentando borrar un permiso es el mismo que lo ha creado, si no es el mismo salta un error de permisos y corta la ejecución.
-        if ($permission->teacher_id !== Auth::id()) {
+        if ($permission->teacher_id !== $profesor->id) {
             abort(403);
         }
 
