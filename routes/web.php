@@ -16,15 +16,14 @@ Route::get('/', function () {
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
 
-Route::middleware('profesorAuth')->group(function () {
-    Route::get('/dashboard', [BathroomPermissionController::class, 'index'])->name('dashboard');
 
-    Route::post('/give-permission', [BathroomPermissionController::class, 'givePermission'])->name('give.permission');
+Route::get('/dashboard', [BathroomPermissionController::class, 'index'])->name('dashboard');
 
-    Route::post('/mark-returned/{id}', [BathroomPermissionController::class, 'markReturned'])->name('mark.returned');
+Route::post('/give-permission', [BathroomPermissionController::class, 'givePermission'])->name('give.permission');
 
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-});
+Route::post('/mark-returned/{id}', [BathroomPermissionController::class, 'markReturned'])->name('mark.returned');
+
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::post('/import/{type}', [ImportController::class, 'import'])->name('import');
