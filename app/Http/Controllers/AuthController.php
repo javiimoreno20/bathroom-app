@@ -18,7 +18,6 @@ class AuthController extends Controller
         //Recoge del formulario los valores solicitados, los valida y si son válidos los guarda en una variable.
         $credentials = $request->validate([
             'email' => ['required','email'],
-            'password' => ['required']
         ]);
 
         //Si consigue pasar el paso anterior comprueba que los valores obtenidos se encuentren en la base de datos para permitir el inicio de sesión. Si están en la base de datos crea una id de sesión única y redirige al index donde se pueden empezar a crear permisos y verlos.

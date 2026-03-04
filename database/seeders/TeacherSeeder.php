@@ -47,13 +47,11 @@ class TeacherSeeder extends Seeder
             //Divide las columnas del csv entre nombre de alumno y curso.
             $full_name = trim($rowData['full_name']);
             $email = trim($rowData['email']);
-            $password = trim($rowData['password']);
 
             //Añadimos el alumno al array de batch.
             $teachersData[] = [
                 'full_name' => $full_name,
                 'email' => $email,
-                'password' => Hash::make($password),
                 'is_admin' => !empty($rowData['is_admin'] ?? false),
                 'created_at' => now(),
                 'updated_at' => now(),
