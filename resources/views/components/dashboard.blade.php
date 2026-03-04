@@ -63,6 +63,7 @@
     <br>
 
     @if(session()->has('teacher') && session('teacher')->is_admin)
+        <pre>{{ var_dump(session('profesor')) }}</pre>
         <hr>
         <h2>Importaciones masivas</h2>
         <p>Importa los datos directamente desde Google Sheets.</p>
