@@ -3,48 +3,63 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class AuthController extends Controller
 {
-    public function showLogin() {
-
-        //Devuelve la vista del formulario para iniciar sesión.
+    /**
+     * Mostrar el formulario de login
+     */
+    public function showLogin()
+    {
         return view('auth.login');
     }
 
-    public function login(Request $request) {
-
-        //Recoge del formulario los valores solicitados, los valida y si son válidos los guarda en una variable.
-        $credentials = $request->validate([
-            'email' => ['required','email'],
+    /**
+     * Iniciar sesión sin contraseña (solo email)
+     */
+    public function login(Request $request)
+    {
+        // Valida que el email tenga formato correcto
+        $validated = $request->validate([
+            'email' => ['required', 'email'],
         ]);
 
-        //Si consigue pasar el paso anterior comprueba que los valores obtenidos se encuentren en la base de datos para permitir el inicio de sesión. Si están en la base de datos crea una id de sesión única y redirige al index donde se pueden empezar a crear permisos y verlos.
-        if (Auth::attempt($credentials)) {
+        // Busca al profesor en la base de datos
+        $profesor = DB::table('teachers')->where('email', $validated['email'])->first();
+
+        if ($profesor) {
+            // Crear sesión manualmente
+            session(['teacher_id' => $profesor->id]);
+
+            // Regenerar ID de sesión por seguridad
             $request->session()->regenerate();
+
+            // Redirigir al dashboard
             return redirect('/dashboard');
         }
 
-        //Si pasa del if significaría que las credenciales no eran correctas y el programa volvería a mandar a la vista del formulario de inicio de sesión con un mensaje de error.
+        // Si no existe el email, devolver error
         return back()->withErrors([
-            'email' => 'Credenciales incorrectas.',
+            'email' => 'Profesor no registrado.',
         ]);
     }
 
-    public function logout(Request $request) {
+    /**
+     * Cerrar sesión
+     */
+    public function logout(Request $request)
+    {
+        // Borrar sesión del profesor
+        session()->forget('profesor_id');
 
-        //Desloguea al profesor actual.
-        Auth::logout();
-
-        //Destruye la sesión actual.
+        // Invalidar sesión actual
         $request->session()->invalidate();
 
-        //Genera un token nuevo CSRF para la sesión siguiente (SEGURIDAD).
+        // Regenerar token CSRF
         $request->session()->regenerateToken();
 
-        //Redirige a la vista del formulario para iniciar sesión.
+        // Redirigir al login
         return redirect('/login');
     }
 }
-
