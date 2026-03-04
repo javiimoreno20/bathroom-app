@@ -25,39 +25,38 @@ Route::post('/mark-returned/{id}', [BathroomPermissionController::class, 'markRe
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::middleware(['auth'])->prefix('admin')->group(function () {
-    Route::post('/import/{type}', [ImportController::class, 'import'])->name('import');
 
-    // -------- ALUMNOS --------
+Route::post('/import/{type}', [ImportController::class, 'import'])->name('import');
 
-    Route::get('/alumns', [AlumnController::class, 'index'])->name('alumns.index');
+// -------- ALUMNOS --------
 
-    Route::get('/alumns/create', [AlumnController::class, 'create'])->name('alumns.create');
+Route::get('/alumns', [AlumnController::class, 'index'])->name('alumns.index');
 
-    Route::post('/alumns', [AlumnController::class, 'store'])->name('alumns.store');
+Route::get('/alumns/create', [AlumnController::class, 'create'])->name('alumns.create');
 
-    Route::get('/alumns/{id}/edit', [AlumnController::class, 'edit'])->name('alumns.edit');
+Route::post('/alumns', [AlumnController::class, 'store'])->name('alumns.store');
 
-    Route::put('/alumns/{id}', [AlumnController::class, 'update'])->name('alumns.update');
-    Route::patch('/alumns/{id}', [AlumnController::class, 'update']);
+Route::get('/alumns/{id}/edit', [AlumnController::class, 'edit'])->name('alumns.edit');
 
-    Route::delete('/alumns/{id}', [AlumnController::class, 'destroy'])->name('alumns.destroy');
+Route::put('/alumns/{id}', [AlumnController::class, 'update'])->name('alumns.update');
+Route::patch('/alumns/{id}', [AlumnController::class, 'update']);
 
-    // -------- PROFESORES --------
+Route::delete('/alumns/{id}', [AlumnController::class, 'destroy'])->name('alumns.destroy');
 
-    Route::get('/teachers', [TeacherController::class, 'index'])->name('teachers.index');
+// -------- PROFESORES --------
 
-    Route::get('/teachers/create', [TeacherController::class, 'create'])->name('teachers.create');
+Route::get('/teachers', [TeacherController::class, 'index'])->name('teachers.index');
 
-    Route::post('/teachers', [TeacherController::class, 'store'])->name('teachers.store');
+Route::get('/teachers/create', [TeacherController::class, 'create'])->name('teachers.create');
 
-    Route::get('/teachers/{id}/edit', [TeacherController::class, 'edit'])->name('teachers.edit');
+Route::post('/teachers', [TeacherController::class, 'store'])->name('teachers.store');
 
-    Route::put('/teachers/{id}', [TeacherController::class, 'update'])->name('teachers.update');
-    Route::patch('/teachers/{id}', [TeacherController::class, 'update']);
+Route::get('/teachers/{id}/edit', [TeacherController::class, 'edit'])->name('teachers.edit');
 
-    Route::delete('/teachers/{id}', [TeacherController::class, 'destroy'])->name('teachers.destroy');
-});
+Route::put('/teachers/{id}', [TeacherController::class, 'update'])->name('teachers.update');
+Route::patch('/teachers/{id}', [TeacherController::class, 'update']);
+
+Route::delete('/teachers/{id}', [TeacherController::class, 'destroy'])->name('teachers.destroy');
 
 // routes/web.php
 use Illuminate\Support\Facades\Artisan;
