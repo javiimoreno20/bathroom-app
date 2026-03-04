@@ -52,9 +52,11 @@ class BathroomPermissionController extends Controller
             return back()->with('error', 'El baño está lleno');
         }
 
+        $profesor = session('profesor'); // trae el profesor de la sesión
+
         //Si pasa del if porque hay hueco para otro permiso, crea un permiso con la id del profesor logueado.
         BathroomPermission::create([
-            'teacher_id' => Auth::id(),
+            'teacher_id' => $profesor->id,
             'alumn_id' => $request->alumn_id,
         ]);
 
