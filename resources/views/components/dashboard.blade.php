@@ -62,7 +62,7 @@
 
     <br>
 
-    @if(Auth::user() && Auth::user()->is_admin)
+    @if(session()->has('teacher') && session('teacher')->is_admin)
         <hr>
         <h2>Importaciones masivas</h2>
         <p>Importa los datos directamente desde Google Sheets.</p>

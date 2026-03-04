@@ -29,11 +29,11 @@ class AuthController extends Controller
         $profesor = DB::table('teachers')->where('email', $validated['email'])->first();
 
         if ($profesor) {
-            // Crear sesión manualmente
-            session(['teacher_id' => $profesor->id]);
-
             // Regenerar ID de sesión por seguridad
             $request->session()->regenerate();
+
+            // Guardar todo el profesor en la sesión
+            $request->session()->put('profesor', $profesor);
 
             // Redirigir al dashboard
             return redirect('/dashboard');
