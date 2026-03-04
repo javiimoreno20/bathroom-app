@@ -17,6 +17,6 @@ class Kernel extends HttpKernel
     ];
 
     protected $routeMiddleware = [
-        'ProfesorAuth' => \App\Http\Middleware\ProfesorAuth::class,
+        'profesorAuth' => \App\Http\Middleware\ProfesorAuth::class,
     ];
 }

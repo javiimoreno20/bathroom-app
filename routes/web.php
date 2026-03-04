@@ -16,7 +16,7 @@ Route::get('/', function () {
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
 
-Route::middleware('ProfesorAuth')->group(function () {
+Route::middleware('profesorAuth')->group(function () {
     Route::get('/dashboard', [BathroomPermissionController::class, 'index'])->name('dashboard');
 
     Route::post('/give-permission', [BathroomPermissionController::class, 'givePermission'])->name('give.permission');
