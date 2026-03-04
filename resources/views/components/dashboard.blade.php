@@ -61,6 +61,7 @@
     @endforeach
 
     <br>
+    <pre>{{ var_dump(session('profesor')) }}</pre>
 
     @if(session()->has('teacher') && session('teacher')->is_admin)
         <pre>{{ var_dump(session('profesor')) }}</pre>
