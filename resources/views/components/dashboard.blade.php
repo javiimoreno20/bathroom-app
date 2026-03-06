@@ -71,6 +71,8 @@
             <button type="button">Abrir Google Sheets</button>
         </a>
 
+        <br><br>
+
         <form action="{{ route('import', ['type' => 'teachers']) }}" method="POST" style="display:inline-block;">
             @csrf
             <button type="submit">Importar Profesores</button>
