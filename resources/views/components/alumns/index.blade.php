@@ -3,6 +3,12 @@
 
     <h1>Lista de Alumnos</h1>
 
+    <a href="{{ route('dashboard') }}">
+        <button type="button">Volver</button>
+    </a>
+
+    <br><br>
+
     <a href="{{ route('alumns.create') }}">
         <button type="button">Crear nuevo alumno</button>
     </a>
