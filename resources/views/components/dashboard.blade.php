@@ -67,6 +67,10 @@
         <h2>Importaciones masivas</h2>
         <p>Importa los datos directamente desde Google Sheets.</p>
 
+        <a href="https://docs.google.com/spreadsheets/d/16IT-sjzeoA1-Is2gH94N0YJTPLvZfJmDRq4Vvs0yBcc/edit?usp=sharing" target="_blank">
+            <button type="button">Abrir Google Sheets</button>
+        </a>
+
         <form action="{{ route('import', ['type' => 'teachers']) }}" method="POST" style="display:inline-block;">
             @csrf
             <button type="submit">Importar Profesores</button>
