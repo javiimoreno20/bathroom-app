@@ -25,7 +25,7 @@
 
         <button type="submit">Actualizar</button>
     </form>
-    <a href="{{ route('teachers.index') }}">
+    <a href="{{ route('alumns.index') }}">
         <button type="button">Volver</button>
     </a>
 </div>
