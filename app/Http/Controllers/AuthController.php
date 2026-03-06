@@ -20,26 +20,19 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-        // Validación del email
         $validated = $request->validate([
             'email' => ['required', 'email'],
         ]);
 
-        // Buscar al profesor usando whereEncrypted
-        $profesor = Teacher::whereEncrypted('email', $validated['email'])->first();
+        $profesor = Teacher::all()->first(fn($t) => $t->email === $validated['email']);
 
         if ($profesor) {
-            // Regenerar ID de sesión por seguridad
             $request->session()->regenerate();
-
-            // Guardar el profesor completo en sesión
             $request->session()->put('profesor', $profesor);
 
-            // Redirigir al dashboard
             return redirect()->route('dashboard');
         }
 
-        // Si no existe el email, devolver error
         return back()->withErrors([
             'email' => 'Profesor no registrado.',
         ]);
