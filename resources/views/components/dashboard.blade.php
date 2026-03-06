@@ -78,7 +78,7 @@
             <button type="submit">Importar Profesores</button>
         </form>
 
-        <form action="{{ route('import', ['type' => 'alumns']) }}" method="POST" style="display:inline-block; margin-left:10px;">
+        <form action="{{ route('import', ['type' => 'alumns']) }}" method="POST" style="display:inline-block;">
             @csrf
             <button type="submit">Importar Alumnos</button>
         </form>
