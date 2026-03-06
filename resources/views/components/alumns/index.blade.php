@@ -4,7 +4,7 @@
     <h1>Lista de Alumnos</h1>
 
     <a href="{{ route('dashboard') }}">
-        <button type="button">Volver</button>
+        <button type="button">Volver a la página principal</button>
     </a>
 
     <br><br>
