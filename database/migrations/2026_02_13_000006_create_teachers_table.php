@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('teachers', function (Blueprint $table) {
             $table->id();
-            $table->string('full_name');
-            $table->string('email')->unique();
+            $table->text('full_name');
+            $table->text('email')->unique();
             $table->boolean('is_admin')->default(false);
             $table->timestamps();
         });

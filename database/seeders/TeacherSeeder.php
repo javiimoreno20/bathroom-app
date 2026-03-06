@@ -28,7 +28,6 @@ class TeacherSeeder extends Seeder
             Teacher::create([
                 'full_name' => trim($rowData['full_name']),
                 'email' => trim($rowData['email']),
-                'password' => Hash::make(trim($rowData['password'] ?? '1234')), // Si no hay password en CSV, usamos '1234'
                 'is_admin' => !empty($rowData['is_admin'] ?? false),
             ]);
         }
