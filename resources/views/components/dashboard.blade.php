@@ -69,7 +69,7 @@
 
         <form action="{{ route('import', ['type' => 'teachers']) }}" method="POST" style="display:inline-block;">
             @csrf
-            <button type="submit">Importar Teachers</button>
+            <button type="submit">Importar Profesores</button>
         </form>
 
         <form action="{{ route('import', ['type' => 'alumns']) }}" method="POST" style="display:inline-block; margin-left:10px;">
@@ -78,12 +78,12 @@
         </form>
 
         <!-- NUEVOS BOTONES -->
-         <h2>Edición Individual</h2>
+        <h2>Edición Individual</h2>
         <a href="{{ route('teachers.index') }}">
             <button type="button">Ver Profesores</button>
         </a>
 
-        <a href="{{ route('alumns.index') }}" style="margin-left:10px;">
+        <a href="{{ route('alumns.index') }}">
             <button type="button">Ver Alumnos</button>
         </a>
 

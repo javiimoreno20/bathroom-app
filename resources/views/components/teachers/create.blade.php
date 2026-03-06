@@ -12,6 +12,12 @@
         <input type="email" name="email" value="{{ old('email') }}">
         <br><br>
 
+        <label>
+            <input type="checkbox" name="is_admin" value="1" {{ old('is_admin') ? 'checked' : '' }}>
+            Sí (Administrador)
+        </label>
+        <br><br>
+
         <button type="submit">Guardar</button>
     </form>
 </div>

@@ -34,12 +34,17 @@ class TeacherController extends Controller
      */
     public function store(Request $request)
     {
-        //
         $request->validate([
             'full_name' => 'required|string|max:255',
-            'email' => 'required|unique:teachers,email|string|max:255',
+            'email' => 'required|string|max:255|unique:teachers,email',
         ]);
-        Teacher::create($request->all());
+
+        Teacher::create([
+            'full_name' => $request->full_name,
+            'email' => $request->email,
+            'is_admin' => $request->has('is_admin'), // true o false
+        ]);
+
         return redirect()->route('teachers.index');
     }
 
@@ -57,15 +62,26 @@ class TeacherController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $teacher = Teacher::findOrFail($id);
+
         $request->validate([
             'full_name' => 'required|string|max:255',
-            'email' => 'required|unique:teachers,email,' . $id . '|string|max:255',
+            'email' => 'required|string|max:255|unique:teachers,email,' . $id,
         ]);
-        $teacher = Teacher::findOrFail($id);
-        $teacher->update($request->all());
+
+        $teacher->update([
+            'full_name' => $request->full_name,
+            'email' => $request->email,
+            'is_admin' => $request->has('is_admin') // true si está marcado, false si no
+        ]);
+
+        // Si el profesor editado es el que está logueado, actualizar la sesión
+        if (session('profesor') && session('profesor')->id == $teacher->id) {
+            session()->put('profesor', $teacher);
+        }
+
         return redirect()->route('teachers.index');
     }
 

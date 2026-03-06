@@ -16,13 +16,7 @@ class Teacher extends Authenticatable
     protected $fillable = [
         'full_name',
         'email',
-        'password',
         'is_admin'
-    ];
-
-    //Los campos añadidos se quedan ocultos.
-    protected $hidden = [
-        'password'
     ];
 
     //Relación con otra tabla.
