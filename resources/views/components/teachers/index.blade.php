@@ -3,6 +3,10 @@
 
     <h1>Lista de Profesores</h1>
 
+    <a href="{{ route('dashboard') }}">
+        <button type="button">Volver al dashboard</button>
+    </a>
+
     <a href="{{ route('teachers.create') }}">
         <button type="button">Crear nuevo profesor</button>
     </a>

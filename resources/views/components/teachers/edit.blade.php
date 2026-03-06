@@ -29,4 +29,7 @@
 
         <button type="submit">Actualizar</button>
     </form>
+    <a href="{{ route('teachers.index') }}">
+        <button type="button">Volver</button>
+    </a>
 </div>
