@@ -7,6 +7,8 @@
         <button type="button">Volver al dashboard</button>
     </a>
 
+    <br><br>
+
     <a href="{{ route('teachers.create') }}">
         <button type="button">Crear nuevo profesor</button>
     </a>
