@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use App\Models\Alumn;
 use Illuminate\Support\Facades\DB;
 
 class AlumnSeeder extends Seeder
@@ -21,7 +22,7 @@ class AlumnSeeder extends Seeder
         $allRows = [];
         $uniqueCourseNames = [];
 
-        //Leemos todo el archivo primero para recolectar nombres de cursos.
+        // Leemos todo el CSV primero
         while (($row = fgetcsv($file)) !== false) {
             $rowData = array_combine($header, $row);
             $courseName = trim($rowData['curso']);
@@ -33,57 +34,40 @@ class AlumnSeeder extends Seeder
         }
         fclose($file);
 
-        //ORDENAR LOS CURSOS (Lógica personalizada).
+        // Ordenar cursos (ESO, BACH, IF)
         usort($uniqueCourseNames, function($a, $b) {
-
-            //Definimos prioridades de palabras clave.
             $priorities = ['ESO' => 1, 'BACH' => 2, 'IF' => 3];
-            
             $getPriority = function($name) use ($priorities) {
                 foreach ($priorities as $key => $p) {
                     if (str_contains(strtoupper($name), $key)) return $p;
                 }
                 return 99;
             };
-
             $pA = $getPriority($a);
             $pB = $getPriority($b);
-
-            if ($pA != $pB) return $pA <=> $pB; //Ordenar por ESO, luego BACH...
-            return $a <=> $b; //Si son del mismo tipo (ej. 1º ESO vs 2º ESO), orden alfabético.
+            if ($pA != $pB) return $pA <=> $pB;
+            return $a <=> $b;
         });
 
-        //Insertar cursos ordenados y guardar sus IDs.
+        // Insertar cursos y guardar IDs
         $courseMap = [];
         foreach ($uniqueCourseNames as $name) {
-            $id = DB::table('courses')->insertGetId([
+            $courseMap[$name] = DB::table('courses')->insertGetId([
                 'name' => $name,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
-            $courseMap[$name] = $id;
         }
 
-        //Insertar alumnos usando el mapa de IDs.
-        $studentsData = [];
-        $batchSize = 500;
-
+        // Insertar alumnos con Eloquent (para cifrado)
         foreach ($allRows as $rowData) {
-            $studentsData[] = [
+            $courseName = trim($rowData['curso']);
+            if (!isset($courseMap[$courseName])) continue;
+
+            Alumn::create([
                 'full_name' => trim($rowData['full_name']),
-                'course_id' => $courseMap[trim($rowData['curso'])],
-                'created_at' => now(),
-                'updated_at' => now(),
-            ];
-
-            if (count($studentsData) === $batchSize) {
-                DB::table('alumns')->insert($studentsData);
-                $studentsData = [];
-            }
-        }
-
-        if (!empty($studentsData)) {
-            DB::table('alumns')->insert($studentsData);
+                'course_id' => $courseMap[$courseName],
+            ]);
         }
     }
 }

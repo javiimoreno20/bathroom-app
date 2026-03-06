@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Models\Teacher;
 
 class AuthController extends Controller
 {
@@ -20,23 +20,23 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-        // Valida que el email tenga formato correcto
+        // Validación del email
         $validated = $request->validate([
             'email' => ['required', 'email'],
         ]);
 
-        // Busca al profesor en la base de datos
-        $profesor = DB::table('teachers')->where('email', $validated['email'])->first();
+        // Buscar al profesor usando whereEncrypted
+        $profesor = Teacher::whereEncrypted('email', $validated['email'])->first();
 
         if ($profesor) {
             // Regenerar ID de sesión por seguridad
             $request->session()->regenerate();
 
-            // Guardar todo el profesor en la sesión
+            // Guardar el profesor completo en sesión
             $request->session()->put('profesor', $profesor);
 
             // Redirigir al dashboard
-            return redirect('/dashboard');
+            return redirect()->route('dashboard');
         }
 
         // Si no existe el email, devolver error
@@ -60,6 +60,6 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         // Redirigir al login
-        return redirect('/login');
+        return redirect()->route('login');
     }
 }

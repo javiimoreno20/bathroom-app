@@ -6,7 +6,6 @@ use App\Models\Alumn;
 use Illuminate\Http\Request;
 use App\Models\BathroomPermission;
 use App\Models\Course;
-use Illuminate\Support\Facades\Auth;
 
 
 class BathroomPermissionController extends Controller
