@@ -19,9 +19,10 @@
 
         <label>Administrador:</label>
 
-        <!-- valor por defecto -->
+        <!-- Siempre envía un valor 0 si está desmarcado -->
         <input type="hidden" name="is_admin" value="0">
 
+        <!-- Checkbox real, envía 1 si está marcado -->
         <input type="checkbox" name="is_admin" value="1"
             {{ old('is_admin', $teacher->is_admin) ? 'checked' : '' }}>
 

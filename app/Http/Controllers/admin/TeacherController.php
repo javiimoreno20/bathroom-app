@@ -73,7 +73,7 @@ class TeacherController extends Controller
         $teacher->update([
             'full_name' => $request->full_name,
             'email' => $request->email,
-            'is_admin' => $request->has('is_admin') // true si está marcado, false si no
+            'is_admin' => $request->is_admin,
         ]);
 
         // Si el profesor editado es el que está logueado, actualizar la sesión
