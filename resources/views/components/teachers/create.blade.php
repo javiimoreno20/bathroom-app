@@ -14,7 +14,7 @@
 
         <label>
             <input type="checkbox" name="is_admin" value="1" {{ old('is_admin') ? 'checked' : '' }}>
-            Sí (Administrador)
+            Administrador
         </label>
         <br><br>
 
