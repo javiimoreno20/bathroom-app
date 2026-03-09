@@ -1,7 +1,7 @@
 <div>
-    <h1>Control de Baño</h1>
+    <h1>Control de Pasillo</h1>
 
-    <h2>Actualmente en el baño: {{ $currentCount }}/5</h2>
+    <h2>Actualmente en el pasillo: {{ $currentCount }}/5</h2>
 
     @if(session('error'))
         <p style="color:red">{{ session('error') }}</p>
