@@ -44,7 +44,6 @@ class importController extends Controller
                             ['email' => trim($row['email'])],
                             [
                                 'full_name' => trim($row['full_name']),
-                                'password' => Hash::make(trim($row['password'])),
                                 'is_admin' => !empty($row['is_admin'] ?? false),
                                 'created_at' => now(),
                                 'updated_at' => now(),
