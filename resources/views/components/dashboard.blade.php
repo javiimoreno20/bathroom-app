@@ -30,7 +30,10 @@
         @if($alumns->isNotEmpty())
             <select name="alumn_id">
                 @foreach($alumns as $alumn)
-                    <option value="{{ $alumn->id }}">{{ $alumn->full_name }}</option>
+                    <option value="{{ $alumn->id }}">
+                        {{ $alumn->full_name }}
+                        ({{ $salidasHoy[$alumn->id] ?? 0 }} hoy)
+                    </option>
                 @endforeach
             </select>
             <br>

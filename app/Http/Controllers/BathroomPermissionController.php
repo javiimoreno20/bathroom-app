@@ -33,15 +33,16 @@ class BathroomPermissionController extends Controller
             $alumns = Alumn::where('course_id', $courseId)->get();
         }
 
+        $salidasHoy = BathroomPermission::whereDate('created_at', now())->selectRaw('alumn_id, COUNT(*) as total')->groupBy('alumn_id')->pluck('total', 'alumn_id');
+
         // En tu BathroomPermissionController@index
         return response()
-            ->view('dashboard', compact('currentCount', 'activePermissions', 'courses', 'alumns', 'courseId'))
+            ->view('dashboard', compact('currentCount', 'activePermissions', 'courses', 'alumns', 'courseId', 'salidasHoy'))
             ->header('Cache-Control', 'no-cache, no-store, max-age=0, must-revalidate')
             ->header('Pragma', 'no-cache')
             ->header('Expires', 'Sat, 01 Jan 1990 00:00:00 GMT');
 
         //Devuelve una vista enviándole la información de la cantidad de permisos activos actualmente y la información de cada permiso con la id del profesor que ha creado dicho permiso.
-        return view('dashboard', compact('currentCount', 'activePermissions', 'courses', 'alumns', 'courseId'));
     }
 
     public function givePermission(Request $request) {
