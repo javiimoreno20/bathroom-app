@@ -105,6 +105,11 @@ class BathroomPermissionController extends Controller
 
         $spreadsheetId = '16IT-sjzeoA1-Is2gH94N0YJTPLvZfJmDRq4Vvs0yBcc';
 
+        // ⚡️ Marcar automáticamente permisos que llevan >10 min
+        BathroomPermission::whereNull('returned_at')
+            ->where('created_at', '<=', now()->subMinutes(10))
+            ->update(['returned_at' => now()]);
+
         $permissions = BathroomPermission::with('teacher','alumn')->get();
 
         $rows = [];
