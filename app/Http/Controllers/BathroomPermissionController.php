@@ -110,32 +110,25 @@ class BathroomPermissionController extends Controller
         $rows = [];
 
         foreach ($permissions as $permission) {
-
             $rows[] = [
-                'alumn' => $permission->alumn->full_name,
-                'teacher' => $permission->teacher->full_name,
+                'alumn' => $permission->alumn?->full_name ?? 'Sin alumno',
+                'teacher' => $permission->teacher?->full_name ?? 'Sin profesor',
                 'created_at' => $permission->created_at,
                 'returned_at' => $permission->returned_at
             ];
         }
 
         try {
-
             $sheetService->writeSheetData(
                 $spreadsheetId,
                 'bathroom_permissions!A:D',
                 $rows
             );
-
         } catch (\Exception $e) {
-
-            logger('Error exportando permisos', [
-                'message' => $e->getMessage()
-            ]);
-
-            return back()->with('error','Error exportando datos.');
+            logger('Error exportando permisos', ['message' => $e->getMessage()]);
+            return back()->with('error','Error exportando datos: '.$e->getMessage());
         }
 
-        return back()->with('success','Permisos exportados a Google Sheets.');
+        return back()->with('success','Permisos exportados correctamente a Google Sheets.');
     }
 }

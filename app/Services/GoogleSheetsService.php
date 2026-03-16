@@ -43,12 +43,16 @@ class GoogleSheetsService
     {
         $values = [];
 
+        // 1️⃣ Cabeceras
+        $values[] = ['Alumno', 'Profesor', 'Salida', 'Regreso'];
+
+        // 2️⃣ Filas de datos
         foreach ($rows as $row) {
             $values[] = [
                 $row['alumn'],
                 $row['teacher'],
-                $row['created_at'],
-                $row['returned_at']
+                $row['created_at'] instanceof \DateTime ? $row['created_at']->format('Y-m-d H:i:s') : $row['created_at'],
+                $row['returned_at'] instanceof \DateTime ? $row['returned_at']->format('Y-m-d H:i:s') : ($row['returned_at'] ?? '')
             ];
         }
 
@@ -56,16 +60,16 @@ class GoogleSheetsService
             'values' => $values
         ]);
 
-        $params = [
-            'valueInputOption' => 'RAW'
-        ];
+        $params = ['valueInputOption' => 'RAW'];
 
+        // 3️⃣ Limpiar la hoja antes de escribir
         $this->service->spreadsheets_values->clear(
             $spreadsheetId,
-            'bathroom_permissions!A:D',
+            $range,
             new \Google\Service\Sheets\ClearValuesRequest()
         );
 
+        // 4️⃣ Escribir datos + cabeceras
         $this->service->spreadsheets_values->update(
             $spreadsheetId,
             $range,
