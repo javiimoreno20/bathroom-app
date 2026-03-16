@@ -15,7 +15,11 @@ class BathroomPermissionController extends Controller
     public function index(Request $request) {
 
         //Filtro para permisos activos y comprueba si llevan más de 10 minutos, si lo lleva se actualiza el returned_at de null a la fecha actual.
-        BathroomPermission::whereNull('returned_at')->where('created_at', '<=', now()->subMinutes(10))->update(['returned_at' => now()]);
+        BathroomPermission::whereNull('returned_at')->where('created_at', '<=', now()->subMinutes(10))->get()->each(function($permission) {
+            $permission->update([
+                'returned_at' => $permission->created_at->copy()->addMinutes(10)
+            ]);
+        });
 
         //Guarda en una variable todos los permisos que tengan null en returned_at y el profesor que haya creado el permiso.
         $activePermissions = BathroomPermission::whereNull('returned_at')->with('teacher', 'alumn')->get();
@@ -105,12 +109,15 @@ class BathroomPermissionController extends Controller
 
         $spreadsheetId = '16IT-sjzeoA1-Is2gH94N0YJTPLvZfJmDRq4Vvs0yBcc';
 
-        // ⚡️ Marcar automáticamente permisos que llevan >10 min
-        BathroomPermission::whereNull('returned_at')
-            ->where('created_at', '<=', now()->subMinutes(10))
-            ->update(['returned_at' => now()]);
+        // 1️⃣ Actualizar permisos vencidos antes de exportar
+        BathroomPermission::whereNull('returned_at')->where('created_at', '<=', now()->subMinutes(10))->get()->each(function($permission) {
+                $permission->update([
+                    'returned_at' => $permission->created_at->copy()->addMinutes(10)
+                ]);
+            });
 
-        $permissions = BathroomPermission::with('teacher','alumn')->get();
+        // 2️⃣ Obtener todos los permisos con relaciones
+        $permissions = BathroomPermission::with('teacher','alumn')->orderBy('created_at')->get();
 
         $rows = [];
 
