@@ -13,6 +13,12 @@
         </button>
     </form>
 
+    <a href="{{ route('dashboard') }}">
+        <button type="button">
+            Volver al dashboard
+        </button>
+    </a>
+
     <br>
 
     <table border="1">
@@ -42,13 +48,5 @@
     </tbody>
 
     </table>
-
-    <br>
-
-    <a href="{{ route('dashboard') }}">
-        <button type="button">
-            Volver al dashboard
-        </button>
-    </a>
 
 </div>
