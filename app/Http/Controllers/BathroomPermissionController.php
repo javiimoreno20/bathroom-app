@@ -6,6 +6,7 @@ use App\Models\Alumn;
 use Illuminate\Http\Request;
 use App\Models\BathroomPermission;
 use App\Models\Course;
+use App\Services\GoogleSheetsService;
 
 
 class BathroomPermissionController extends Controller
@@ -89,5 +90,52 @@ class BathroomPermissionController extends Controller
 
         //Vuelve al index
         return back();
+    }
+
+    public function history()
+    {
+        $permissions = BathroomPermission::with('teacher', 'alumn')->orderBy('created_at', 'desc')->get();
+
+        return view('bathroom_permissions.history', compact('permissions'));
+    }
+
+    public function exportPermissions()
+    {
+        $sheetService = new GoogleSheetsService();
+
+        $spreadsheetId = '16IT-sjzeoA1-Is2gH94N0YJTPLvZfJmDRq4Vvs0yBcc';
+
+        $permissions = BathroomPermission::with('teacher','alumn')->get();
+
+        $rows = [];
+
+        foreach ($permissions as $permission) {
+
+            $rows[] = [
+                'alumn' => $permission->alumn->full_name,
+                'teacher' => $permission->teacher->full_name,
+                'created_at' => $permission->created_at,
+                'returned_at' => $permission->returned_at
+            ];
+        }
+
+        try {
+
+            $sheetService->writeSheetData(
+                $spreadsheetId,
+                'bathroom_permissions!A:D',
+                $rows
+            );
+
+        } catch (\Exception $e) {
+
+            logger('Error exportando permisos', [
+                'message' => $e->getMessage()
+            ]);
+
+            return back()->with('error','Error exportando datos.');
+        }
+
+        return back()->with('success','Permisos exportados a Google Sheets.');
     }
 }

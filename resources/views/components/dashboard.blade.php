@@ -97,6 +97,15 @@
         </a>
 
         <br><br>
+
+        <h2>Historial de Permisos</h2>
+        <a href="{{ route('permissions.history') }}">
+            <button type="button">
+                Ver historial de permisos
+            </button>
+        </a>
+
+        <br><br>
     @endif
 
     <br><br>

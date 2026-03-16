@@ -52,6 +52,10 @@ Route::middleware('teacher.auth')->group(function () {
 
     Route::post('/mark-returned/{id}', [BathroomPermissionController::class, 'markReturned'])->name('mark.returned');
 
+    Route::get('/permissions/history', [BathroomPermissionController::class, 'history'])->name('permissions.history');
+
+   Route::post('/export-permissions', [BathroomPermissionController::class, 'exportPermissions'])->name('permissions.export');
+
 
     /*
     |--------------------------------------------------------------------------

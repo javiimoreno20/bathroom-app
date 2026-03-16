@@ -38,4 +38,33 @@ class GoogleSheetsService
         }
         return $data;
     }
+
+    public function writeSheetData($spreadsheetId, $range, $rows)
+    {
+        $values = [];
+
+        foreach ($rows as $row) {
+            $values[] = [
+                $row['alumn'],
+                $row['teacher'],
+                $row['created_at'],
+                $row['returned_at']
+            ];
+        }
+
+        $body = new \Google\Service\Sheets\ValueRange([
+            'values' => $values
+        ]);
+
+        $params = [
+            'valueInputOption' => 'RAW'
+        ];
+
+        $this->service->spreadsheets_values->update(
+            $spreadsheetId,
+            $range,
+            $body,
+            $params
+        );
+    }
 }
