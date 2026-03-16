@@ -14,7 +14,7 @@ class GoogleSheetsService
     {
         $this->client = new Client();
         $this->client->setAuthConfig(storage_path('app/institutoimport-a87b3220723c.json'));
-        $this->client->addScope(Sheets::SPREADSHEETS_READONLY);
+        $this->client->addScope(Sheets::SPREADSHEETS);
         $this->service = new Sheets($this->client);
     }
 
@@ -59,6 +59,12 @@ class GoogleSheetsService
         $params = [
             'valueInputOption' => 'RAW'
         ];
+
+        $this->service->spreadsheets_values->clear(
+            $spreadsheetId,
+            'bathroom_permissions!A:D',
+            new \Google\Service\Sheets\ClearValuesRequest()
+        );
 
         $this->service->spreadsheets_values->update(
             $spreadsheetId,
