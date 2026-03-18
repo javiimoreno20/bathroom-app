@@ -1,10 +1,14 @@
 <div>
     <h1>Control de Pasillo</h1>
 
-    {{-- Número de permisos en rojo si se llega al máximo --}}
-    <h2 class="{{ $currentCount >= $maxPermissions ? 'text-red-600' : '' }}">
-        Actualmente en el pasillo: {{ $currentCount }}/{{ $maxPermissions }}
-    </h2>
+    {{-- Mensaje si se alcanzó el máximo de permisos activos --}}
+    @if($currentCount >= $maxPermissions)
+        <p style="color:red; font-weight:bold;">
+            ⚠️ Ya se ha alcanzado el límite de permisos activos ({{ $currentCount }}/{{ $maxPermissions }})
+        </p>
+    @endif
+
+    <h2>Actualmente en el pasillo: {{ $currentCount }}/{{ $maxPermissions }}</h2>
 
     @if(session('error'))
         <p style="color:red">{{ session('error') }}</p>
@@ -14,6 +18,7 @@
         <p style="color:green">{{ session('success') }}</p>
     @endif
 
+    {{-- Selección de curso --}}
     <form method="GET" action="{{ route('dashboard') }}">
         <select name="course_id">
             @foreach($courses as $course)
@@ -25,42 +30,42 @@
         <button type="submit">Filtrar</button>
     </form>
 
+    {{-- Mensaje alumnos que han llegado al límite diario --}}
+    @if($courseId)
+        @php
+            $alumnosMaxHoy = $alumns->filter(fn($a) => ($salidasHoy[$a->id] ?? 0) >= $maxDailyPerAlumn);
+        @endphp
+
+        @if($alumnosMaxHoy->isNotEmpty())
+            <p style="color:red; font-weight:bold;">
+                ⚠️ Los siguientes alumnos ya han alcanzado el máximo diario de permisos ({{ $maxDailyPerAlumn }}):
+                <ul>
+                    @foreach($alumnosMaxHoy as $a)
+                        <li>{{ $a->full_name }} ({{ $salidasHoy[$a->id] ?? 0 }} hoy)</li>
+                    @endforeach
+                </ul>
+            </p>
+        @endif
+    @endif
+
+    {{-- Formulario de permisos --}}
     <form method="POST" action="{{ route('give.permission') }}">
         @csrf
 
         @if($alumns->isNotEmpty())
-
-            {{-- Mensaje si algún alumno ya tiene el máximo diario --}}
-            @php
-                $maxReachedAlumns = $alumns->filter(fn($a) => ($salidasHoy[$a->id] ?? 0) >= $maxDailyPerAlumn);
-            @endphp
-
-            @if($maxReachedAlumns->isNotEmpty())
-                <p style="color:red">
-                    @foreach($maxReachedAlumns as $a)
-                        {{ $a->full_name }} ya tiene {{ $salidasHoy[$a->id] ?? 0 }} permisos hoy.<br>
-                    @endforeach
-                </p>
-            @endif
-
-            {{-- Select de alumno --}}
             <select name="alumn_id">
                 @foreach($alumns as $alumn)
                     @php
                         $dailyCount = $salidasHoy[$alumn->id] ?? 0;
                     @endphp
-                    <option value="{{ $alumn->id }}"
-                        @if($dailyCount >= $maxDailyPerAlumn) style="background-color:red; color:white;" @endif>
+                    <option value="{{ $alumn->id }}">
                         {{ $alumn->full_name }} ({{ $dailyCount }} hoy)
                     </option>
                 @endforeach
             </select>
             <br><br>
 
-            {{-- Botón rojo si hay demasiados permisos activos --}}
-            <button type="submit" class="{{ $currentCount >= $maxPermissions ? 'bg-red-500 text-white' : '' }}">
-                Dar permiso
-            </button>
+            <button type="submit">Dar permiso</button>
 
         @else
             <p>Selecciona un Curso:</p>
@@ -87,7 +92,6 @@
 
     @if(session()->has('profesor') && session('profesor')->is_admin)
         <hr>
-
         <h2>Importaciones masivas</h2>
         <p>Importa los datos directamente desde Google Sheets.</p>
 
@@ -138,6 +142,7 @@
             <br><br>
             <button type="submit">Guardar</button>
         </form>
+
         <br><br>
     @endif
 
@@ -147,4 +152,5 @@
         @csrf
         <button type="submit">Cerrar Sesión</button>
     </form>
+
 </div>
