@@ -1,7 +1,7 @@
 <div>
     <h1>Control de Pasillo</h1>
 
-    <h2>Actualmente en el pasillo: {{ $currentCount }}/5</h2>
+    <h2>Actualmente en el pasillo: {{ $currentCount }}/{{ $maxPermissions }}</h2>
 
     @if(session('error'))
         <p style="color:red">{{ session('error') }}</p>
@@ -24,7 +24,7 @@
         </button>
     </form>
 
-    <form method="POST" action="{{ route('give.permission') }}">
+    <form method="POST" action="{{ route('give.permission') }}" onsubmit="return confirmPermission()">
         @csrf
 
         @if($alumns->isNotEmpty())
@@ -38,7 +38,7 @@
             </select>
             <br>
 
-            <button type="submit" {{ $currentCount >= 5 ? 'disabled' : '' }}>
+            <button type="submit">
                 Dar permiso
             </button>
         @else
@@ -106,6 +106,23 @@
         </a>
 
         <br><br>
+
+        <h2>Configuración</h2>
+
+        <form method="POST" action="{{ route('settings.update') }}">
+            @csrf
+
+            <label>Máximo permisos activos:</label>
+            <input type="number" name="max_permissions" value="{{ $maxPermissions }}">
+
+            <label>Máximo diario por alumno:</label>
+            <input type="number" name="max_daily_per_alumn" value="{{ $maxDailyPerAlumn }}">
+
+            <button type="submit">Guardar</button>
+        </form>
+
+        <br><br>
+
     @endif
 
     <br><br>
@@ -118,3 +135,36 @@
     </form>
 
 </div>
+
+{{-- Transferimos datos PHP a JS sin errores de sintaxis --}}
+<div id="dashboard-data"
+     data-current-count="{{ $currentCount }}"
+     data-max-permissions="{{ $maxPermissions }}"
+     data-max-daily-per-alumn="{{ $maxDailyPerAlumn }}"
+     data-salidas-hoy="{{ htmlspecialchars(json_encode($salidasHoy), ENT_QUOTES, 'UTF-8') }}">
+</div>
+
+<script>
+    const dashboardDataEl = document.getElementById('dashboard-data');
+
+    const currentCount = Number(dashboardDataEl.dataset.currentCount);
+    const maxPermissions = Number(dashboardDataEl.dataset.maxPermissions);
+    const maxDailyPerAlumn = Number(dashboardDataEl.dataset.maxDailyPerAlumn);
+    const salidasHoy = JSON.parse(dashboardDataEl.dataset.salidasHoy);
+
+    function confirmPermission() {
+        const select = document.querySelector('select[name="alumn_id"]');
+        const alumnId = select.value;
+        const dailyCount = salidasHoy[alumnId] || 0;
+
+        if (currentCount >= maxPermissions) {
+            return confirm(`⚠️ Ya hay ${maxPermissions} permisos activos.\n¿Quieres dar otro permiso igualmente?`);
+        }
+
+        if (dailyCount >= maxDailyPerAlumn) {
+            return confirm(`⚠️ Este alumno ya tiene ${dailyCount} permisos hoy (máximo recomendado ${maxDailyPerAlumn}).\n¿Quieres dar otro permiso igualmente?`);
+        }
+
+        return true;
+    }
+</script>

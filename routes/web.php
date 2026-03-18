@@ -8,6 +8,8 @@ use App\Http\Controllers\BathroomPermissionController;
 use App\Http\Controllers\admin\ImportController;
 use App\Http\Controllers\admin\AlumnController;
 use App\Http\Controllers\admin\TeacherController;
+use Illuminate\Http\Request;
+use App\Http\Controllers\SettingsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -105,6 +107,13 @@ Route::middleware('teacher.auth')->group(function () {
 
 });
 
+/*
+|--------------------------------------------------------------------------
+| CONFIGURACIÓN
+|--------------------------------------------------------------------------
+*/
+
+Route::post('/settings', [SettingsController::class, 'update'])->name('settings.update');
 
 /*
 |--------------------------------------------------------------------------

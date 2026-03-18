@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\BathroomPermission;
 use App\Models\Course;
 use App\Services\GoogleSheetsService;
+use App\Models\Setting;
 
 
 class BathroomPermissionController extends Controller
@@ -27,6 +28,10 @@ class BathroomPermissionController extends Controller
         //Cuenta todos los permisos que hay activos actualmente.
         $currentCount = $activePermissions->count();
 
+        $maxPermissions = Setting::get('max_permissions', 5);
+
+        $maxDailyPerAlumn   = Setting::get('max_daily_per_alumn', 3);
+
         //Guardo en una variable todos los cursos.
         $courses = Course::all();
 
@@ -42,7 +47,7 @@ class BathroomPermissionController extends Controller
 
         // En tu BathroomPermissionController@index
         return response()
-            ->view('dashboard', compact('currentCount', 'activePermissions', 'courses', 'alumns', 'courseId', 'salidasHoy'))
+            ->view('dashboard', compact('currentCount', 'activePermissions', 'courses', 'alumns', 'courseId', 'salidasHoy', 'maxPermissions', 'maxDailyPerAlumn'))
             ->header('Cache-Control', 'no-cache, no-store, max-age=0, must-revalidate')
             ->header('Pragma', 'no-cache')
             ->header('Expires', 'Sat, 01 Jan 1990 00:00:00 GMT');
@@ -58,11 +63,6 @@ class BathroomPermissionController extends Controller
 
         //Guarda en una variable el número de permisos que hay activos.
         $currentCount = BathroomPermission::whereNull('returned_at')->count();
-
-        //Comprueba si el contador de peermisos es mayor o igual a 5 para saltar un error.
-        if ($currentCount >= 5) {
-            return back()->with('error', 'El baño está lleno');
-        }
 
         $profesor = session('profesor'); // trae el profesor de la sesión
 
