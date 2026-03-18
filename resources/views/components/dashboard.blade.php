@@ -1,7 +1,10 @@
 <div>
     <h1>Control de Pasillo</h1>
 
-    <h2>Actualmente en el pasillo: {{ $currentCount }}/{{ $maxPermissions }}</h2>
+    {{-- Número de permisos en rojo si se llega al máximo --}}
+    <h2 class="{{ $currentCount >= $maxPermissions ? 'text-red-600' : '' }}">
+        Actualmente en el pasillo: {{ $currentCount }}/{{ $maxPermissions }}
+    </h2>
 
     @if(session('error'))
         <p style="color:red">{{ session('error') }}</p>
@@ -24,23 +27,30 @@
         </button>
     </form>
 
-    <form method="POST" action="{{ route('give.permission') }}" onsubmit="return confirmPermission()">
+    <form method="POST" action="{{ route('give.permission') }}">
         @csrf
 
         @if($alumns->isNotEmpty())
+
+            {{-- Select de alumno: rojo si superó límite diario --}}
             <select name="alumn_id">
                 @foreach($alumns as $alumn)
-                    <option value="{{ $alumn->id }}">
-                        {{ $alumn->full_name }}
-                        ({{ $salidasHoy[$alumn->id] ?? 0 }} hoy)
+                    @php
+                        $dailyCount = $salidasHoy[$alumn->id] ?? 0;
+                    @endphp
+                    <option value="{{ $alumn->id }}" 
+                            @if($dailyCount >= $maxDailyPerAlumn) style="background-color: red; color:white;" @endif>
+                        {{ $alumn->full_name }} ({{ $dailyCount }} hoy)
                     </option>
                 @endforeach
             </select>
-            <br>
+            <br><br>
 
-            <button type="submit">
+            {{-- Botón rojo si hay demasiados permisos activos --}}
+            <button type="submit" class="{{ $currentCount >= $maxPermissions ? 'bg-red-500 text-white' : '' }}">
                 Dar permiso
             </button>
+
         @else
             <p>Selecciona un Curso:</p>
         @endif
@@ -49,7 +59,6 @@
     <hr>
 
     <h3>Permisos activos:</h3>
-
     @foreach($activePermissions as $permission)
         <div style="margin-bottom: 10px;">
             Profesor: {{ $permission->teacher->full_name }}
@@ -86,7 +95,6 @@
             <button type="submit">Importar Alumnos</button>
         </form>
 
-        <!-- NUEVOS BOTONES -->
         <h2>Edición Individual</h2>
         <a href="{{ route('teachers.index') }}">
             <button type="button">Ver Profesores</button>
@@ -100,15 +108,12 @@
 
         <h2>Historial de Permisos</h2>
         <a href="{{ route('permissions.history') }}">
-            <button type="button">
-                Ver historial de permisos
-            </button>
+            <button type="button">Ver historial de permisos</button>
         </a>
 
         <br><br>
 
         <h2>Configuración</h2>
-
         <form method="POST" action="{{ route('settings.update') }}">
             @csrf
 
@@ -119,59 +124,15 @@
             <input type="number" name="max_daily_per_alumn" value="{{ $maxDailyPerAlumn }}">
 
             <br><br>
-
             <button type="submit">Guardar</button>
         </form>
-
         <br><br>
-
     @endif
 
     <br><br>
 
     <form method="POST" action="{{ route('logout') }}">
         @csrf
-        <button type="submit">
-            Cerrar Sesión
-        </button>
+        <button type="submit">Cerrar Sesión</button>
     </form>
-
 </div>
-
-{{-- Transferimos datos PHP a JS sin errores de sintaxis --}}
-<div id="dashboard-data"
-     data-current-count="{{ $currentCount }}"
-     data-max-permissions="{{ $maxPermissions }}"
-     data-max-daily-per-alumn="{{ $maxDailyPerAlumn }}"
-     data-salidas-hoy="{{ htmlspecialchars(json_encode($salidasHoy), ENT_QUOTES, 'UTF-8') }}">
-</div>
-
-<script>
-    const dashboardDataEl = document.getElementById('dashboard-data');
-    const currentCount = Number(dashboardDataEl.dataset.currentCount);
-    const maxPermissions = Number(dashboardDataEl.dataset.maxPermissions);
-    const maxDailyPerAlumn = Number(dashboardDataEl.dataset.maxDailyPerAlumn);
-    const salidasHoy = JSON.parse(dashboardDataEl.dataset.salidasHoy);
-
-    // Convertimos las claves a strings por seguridad
-    const salidasHoyStr = {};
-    for (const key in salidasHoy) {
-        salidasHoyStr[String(key)] = salidasHoy[key];
-    }
-
-    function confirmPermission() {
-        const select = document.querySelector('select[name="alumn_id"]');
-        const alumnId = select.value; // siempre string
-        const dailyCount = salidasHoyStr[alumnId] || 0;
-
-        if (currentCount >= maxPermissions) {
-            return confirm(`⚠️ Ya hay ${maxPermissions} permisos activos.\n¿Quieres dar otro permiso igualmente?`);
-        }
-
-        if (dailyCount >= maxDailyPerAlumn) {
-            return confirm(`⚠️ Este alumno ya tiene ${dailyCount} permisos hoy (máximo recomendado ${maxDailyPerAlumn}).\n¿Quieres dar otro permiso igualmente?`);
-        }
-
-        return true;
-    }
-</script>
