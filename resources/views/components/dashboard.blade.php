@@ -118,6 +118,8 @@
             <label>Máximo diario por alumno:</label>
             <input type="number" name="max_daily_per_alumn" value="{{ $maxDailyPerAlumn }}">
 
+            <br><br>
+
             <button type="submit">Guardar</button>
         </form>
 
@@ -146,16 +148,21 @@
 
 <script>
     const dashboardDataEl = document.getElementById('dashboard-data');
-
     const currentCount = Number(dashboardDataEl.dataset.currentCount);
     const maxPermissions = Number(dashboardDataEl.dataset.maxPermissions);
     const maxDailyPerAlumn = Number(dashboardDataEl.dataset.maxDailyPerAlumn);
     const salidasHoy = JSON.parse(dashboardDataEl.dataset.salidasHoy);
 
+    // Convertimos las claves a strings por seguridad
+    const salidasHoyStr = {};
+    for (const key in salidasHoy) {
+        salidasHoyStr[String(key)] = salidasHoy[key];
+    }
+
     function confirmPermission() {
         const select = document.querySelector('select[name="alumn_id"]');
-        const alumnId = select.value;
-        const dailyCount = salidasHoy[alumnId] || 0;
+        const alumnId = select.value; // siempre string
+        const dailyCount = salidasHoyStr[alumnId] || 0;
 
         if (currentCount >= maxPermissions) {
             return confirm(`⚠️ Ya hay ${maxPermissions} permisos activos.\n¿Quieres dar otro permiso igualmente?`);
