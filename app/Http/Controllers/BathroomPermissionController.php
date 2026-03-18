@@ -61,9 +61,6 @@ class BathroomPermissionController extends Controller
             'alumn_id' => 'required|exists:alumns,id'
         ]);
 
-        //Guarda en una variable el número de permisos que hay activos.
-        $currentCount = BathroomPermission::whereNull('returned_at')->count();
-
         $profesor = session('profesor'); // trae el profesor de la sesión
 
         //Si pasa del if porque hay hueco para otro permiso, crea un permiso con la id del profesor logueado.
@@ -73,7 +70,7 @@ class BathroomPermissionController extends Controller
         ]);
 
         //Vuelve al index con la información de los permisos y un mensaje de que el permiso se ha creado correctamente.
-        return back()->with('success', 'Permiso concedido');
+        return redirect()->route('dashboard')->with('success', 'Permiso concedido');
     }
 
     public function markReturned($id) {

@@ -22,9 +22,7 @@
                 </option>
             @endforeach
         </select>
-        <button type="submit">
-            Filtrar
-        </button>
+        <button type="submit">Filtrar</button>
     </form>
 
     <form method="POST" action="{{ route('give.permission') }}">
@@ -32,14 +30,27 @@
 
         @if($alumns->isNotEmpty())
 
-            {{-- Select de alumno: rojo si superó límite diario --}}
+            {{-- Mensaje si algún alumno ya tiene el máximo diario --}}
+            @php
+                $maxReachedAlumns = $alumns->filter(fn($a) => ($salidasHoy[$a->id] ?? 0) >= $maxDailyPerAlumn);
+            @endphp
+
+            @if($maxReachedAlumns->isNotEmpty())
+                <p style="color:red">
+                    @foreach($maxReachedAlumns as $a)
+                        {{ $a->full_name }} ya tiene {{ $salidasHoy[$a->id] ?? 0 }} permisos hoy.<br>
+                    @endforeach
+                </p>
+            @endif
+
+            {{-- Select de alumno --}}
             <select name="alumn_id">
                 @foreach($alumns as $alumn)
                     @php
                         $dailyCount = $salidasHoy[$alumn->id] ?? 0;
                     @endphp
-                    <option value="{{ $alumn->id }}" 
-                            @if($dailyCount >= $maxDailyPerAlumn) style="background-color: red; color:white;" @endif>
+                    <option value="{{ $alumn->id }}"
+                        @if($dailyCount >= $maxDailyPerAlumn) style="background-color:red; color:white;" @endif>
                         {{ $alumn->full_name }} ({{ $dailyCount }} hoy)
                     </option>
                 @endforeach
@@ -76,6 +87,7 @@
 
     @if(session()->has('profesor') && session('profesor')->is_admin)
         <hr>
+
         <h2>Importaciones masivas</h2>
         <p>Importa los datos directamente desde Google Sheets.</p>
 
