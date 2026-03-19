@@ -84,10 +84,17 @@ class BathroomPermissionController extends Controller
             abort(403);
         }
 
-        //Si pasa del if se actualiza el returned_at del permiso de null a la fecha actual
-        $permission->update([
-            'returned_at' => now()
-        ]);
+        // ⛔ Si ya pasaron 10 minutos, forzar hora correcta
+        if ($permission->created_at->addMinutes(10)->isPast()) {
+            $permission->update([
+                'returned_at' => $permission->created_at->copy()->addMinutes(10)
+            ]);
+        } else {
+            // ✅ Si está dentro de tiempo, guardar hora real
+            $permission->update([
+                'returned_at' => now()
+            ]);
+        }
 
         //Vuelve al index
         return back();
