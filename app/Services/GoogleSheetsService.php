@@ -77,4 +77,36 @@ class GoogleSheetsService
             $params
         );
     }
+
+    // public function writeSheetData($spreadsheetId, $range, $rows)
+    // {
+    //     $values = [];
+
+    //     // 1️⃣ Filas de datos (sin cabecera, porque append deja la cabecera intacta)
+    //     foreach ($rows as $row) {
+    //         $values[] = [
+    //             $row['alumn'],
+    //             $row['teacher'],
+    //             $row['created_at'] instanceof \DateTime ? $row['created_at']->format('Y-m-d H:i:s') : $row['created_at'],
+    //             $row['returned_at'] instanceof \DateTime ? $row['returned_at']->format('Y-m-d H:i:s') : ($row['returned_at'] ?? '')
+    //         ];
+    //     }
+
+    //     $body = new \Google\Service\Sheets\ValueRange([
+    //         'values' => $values
+    //     ]);
+
+    //     $params = [
+    //         'valueInputOption' => 'RAW',
+    //         'insertDataOption' => 'INSERT_ROWS' // Añade nuevas filas en lugar de sobrescribir
+    //     ];
+
+    //     // 2️⃣ Usamos append en lugar de clear + update
+    //     $this->service->spreadsheets_values->append(
+    //         $spreadsheetId,
+    //         $range,   // por ejemplo 'bathroom_permissions!A:D'
+    //         $body,
+    //         $params
+    //     );
+    // }
 }
