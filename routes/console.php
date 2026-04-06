@@ -10,3 +10,5 @@ Artisan::command('inspire', function () {
 
 Schedule::command('permissions:export-clean')
     ->weeklyOn(1, '07:00');
+
+Schedule::command('db:keep-alive')->everySixHours();
