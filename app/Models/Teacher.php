@@ -55,9 +55,11 @@ class Teacher extends Authenticatable
     /**
      * ENCRIPTACIÓN email
      */
+
     public function setEmailAttribute($value)
     {
         $this->attributes['email'] = Crypt::encryptString($value);
+        $this->attributes['email_hash'] = hash('sha256', strtolower($value));
     }
 
     public function getEmailAttribute($value)

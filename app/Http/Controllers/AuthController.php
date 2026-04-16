@@ -24,7 +24,9 @@ class AuthController extends Controller
             'email' => ['required', 'email'],
         ]);
 
-        $profesor = Teacher::where('email', $validated['email'])->first();
+        $emailHash = hash('sha256', strtolower($validated['email']));
+
+        $profesor = Teacher::where('email_hash', $emailHash)->first();
 
         if (!$profesor) {
             return back()->withErrors([

@@ -1,0 +1,254 @@
+Script started on 2026-04-16 13:37:24+02:00 [TERM="xterm-256color" TTY="/dev/pts/3" COLUMNS="73" LINES="13"]
+usuario@pc73-98:/opt/lampp/htdocs/Control_Servicio$ php artisan make:command FixTeacherEmailHash
+
+  [37;44m INFO [39;49m Console command [1m[app/Console/Commands/FixTeacherEmailHash.php][22m created successfully.  
+
+usuario@pc73-98:/opt/lampp/htdocs/Control_Servicio$ php artisan teachers:fix-email-hash
+[37;41mError en teacher ID 1[39;49m
+[37;41mError en teacher ID 2[39;49m
+[37;41mError en teacher ID 3[39;49m
+[37;41mError en teacher ID 4[39;49m
+[37;41mError en teacher ID 5[39;49m
+[37;41mError en teacher ID 6[39;49m
+[37;41mError en teacher ID 7[39;49m
+[37;41mError en teacher ID 8[39;49m
+[37;41mError en teacher ID 9[39;49m
+[37;41mError en teacher ID 10[39;49m
+[37;41mError en teacher ID 11[39;49m
+[37;41mError en teacher ID 12[39;49m
+[37;41mError en teacher ID 13[39;49m
+[37;41mError en teacher ID 14[39;49m
+[37;41mError en teacher ID 15[39;49m
+[37;41mError en teacher ID 16[39;49m
+[37;41mError en teacher ID 17[39;49m
+[37;41mError en teacher ID 18[39;49m
+[37;41mError en teacher ID 19[39;49m
+[37;41mError en teacher ID 20[39;49m
+[37;41mError en teacher ID 21[39;49m
+[37;41mError en teacher ID 22[39;49m
+[37;41mError en teacher ID 23[39;49m
+[37;41mError en teacher ID 24[39;49m
+[37;41mError en teacher ID 25[39;49m
+[37;41mError en teacher ID 26[39;49m
+[37;41mError en teacher ID 27[39;49m
+[37;41mError en teacher ID 28[39;49m
+[37;41mError en teacher ID 29[39;49m
+[37;41mError en teacher ID 30[39;49m
+[37;41mError en teacher ID 31[39;49m
+[37;41mError en teacher ID 32[39;49m
+[37;41mError en teacher ID 33[39;49m
+[37;41mError en teacher ID 34[39;49m
+[37;41mError en teacher ID 35[39;49m
+[37;41mError en teacher ID 36[39;49m
+[37;41mError en teacher ID 37[39;49m
+[37;41mError en teacher ID 38[39;49m
+[37;41mError en teacher ID 39[39;49m
+[37;41mError en teacher ID 40[39;49m
+[37;41mError en teacher ID 41[39;49m
+[37;41mError en teacher ID 42[39;49m
+[37;41mError en teacher ID 43[39;49m
+[37;41mError en teacher ID 44[39;49m
+[37;41mError en teacher ID 45[39;49m
+[37;41mError en teacher ID 46[39;49m
+[37;41mError en teacher ID 47[39;49m
+[37;41mError en teacher ID 48[39;49m
+[37;41mError en teacher ID 49[39;49m
+[37;41mError en teacher ID 50[39;49m
+[37;41mError en teacher ID 51[39;49m
+[37;41mError en teacher ID 52[39;49m
+[37;41mError en teacher ID 53[39;49m
+[37;41mError en teacher ID 54[39;49m
+[37;41mError en teacher ID 55[39;49m
+[37;41mError en teacher ID 56[39;49m
+[37;41mError en teacher ID 57[39;49m
+[37;41mError en teacher ID 58[39;49m
+[37;41mError en teacher ID 59[39;49m
+[37;41mError en teacher ID 60[39;49m
+[37;41mError en teacher ID 61[39;49m
+[37;41mError en teacher ID 62[39;49m
+[37;41mError en teacher ID 63[39;49m
+[37;41mError en teacher ID 64[39;49m
+[37;41mError en teacher ID 65[39;49m
+[37;41mError en teacher ID 66[39;49m
+[37;41mError en teacher ID 67[39;49m
+[37;41mError en teacher ID 68[39;49m
+[37;41mError en teacher ID 69[39;49m
+[37;41mError en teacher ID 70[39;49m
+[37;41mError en teacher ID 71[39;49m
+[37;41mError en teacher ID 72[39;49m
+[37;41mError en teacher ID 73[39;49m
+[37;41mError en teacher ID 74[39;49m
+[37;41mError en teacher ID 75[39;49m
+[37;41mError en teacher ID 76[39;49m
+[37;41mError en teacher ID 77[39;49m
+[37;41mError en teacher ID 78[39;49m
+[37;41mError en teacher ID 79[39;49m
+[37;41mError en teacher ID 80[39;49m
+[37;41mError en teacher ID 81[39;49m
+[37;41mError en teacher ID 82[39;49m
+[37;41mError en teacher ID 83[39;49m
+[37;41mError en teacher ID 84[39;49m
+[37;41mError en teacher ID 85[39;49m
+[37;41mError en teacher ID 86[39;49m
+[37;41mError en teacher ID 87[39;49m
+[37;41mError en teacher ID 88[39;49m
+[37;41mError en teacher ID 89[39;49m
+[37;41mError en teacher ID 90[39;49m
+[37;41mError en teacher ID 91[39;49m
+[37;41mError en teacher ID 92[39;49m
+[37;41mError en teacher ID 93[39;49m
+[37;41mError en teacher ID 94[39;49m
+[37;41mError en teacher ID 95[39;49m
+[37;41mError en teacher ID 96[39;49m
+[37;41mError en teacher ID 97[39;49m
+[37;41mError en teacher ID 98[39;49m
+[37;41mError en teacher ID 99[39;49m
+[37;41mError en teacher ID 100[39;49m
+[37;41mError en teacher ID 101[39;49m
+[37;41mError en teacher ID 102[39;49m
+[37;41mError en teacher ID 103[39;49m
+[37;41mError en teacher ID 104[39;49m
+[37;41mError en teacher ID 105[39;49m
+^C
+usuario@pc73-98:/opt/lampp/htdocs/Control_Servicio$ php artisan migrate
+
+  [37;44m INFO [39;49m Running migrations.  
+
+  2026_04_16_133532_add_email_hash_to_teachers [90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m 495.55ms[39m [31;1mFAIL[39;22m
+
+  [41;1m Illuminate\Database\QueryException [49;22m
+
+[39;1m  SQLSTATE[23502]: Not null violation: 7 ERROR:  column "email_hash" of relation "teachers" contains null values (Connection: pgsql, Host: aws-1-eu-west-2.pooler.supabase.com, Port: 6543, Database: postgres, SQL: alter table "teachers" add column "email_hash" varchar(255) not null)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m838[39m
+    [90m834[0m[90m▕ [0m[35;1m            [0m[39;1m$exceptionType [0m[35;1m= [0m[39;1m$this[0m[35;1m->[0m[39;1misUniqueConstraintError[0m[35;1m([0m[39;1m$e[0m[35;1m)[0m
+    [90m835[0m[90m▕ [0m[35;1m                ? [0m[39;1mUniqueConstraintViolationException[0m[35;1m::class[0m
+    [90m836[0m[90m▕ [0m[35;1m                : [0m[39;1mQueryException[0m[35;1m::class;[0m
+    [90m837[0m[90m▕ [0m
+[31;1m  ➜ [0m[3;1m838[0m[90m▕ [0m[35;1m            throw new [0m[39;1m$exceptionType[0m[35;1m([0m
+    [90m839[0m[90m▕ [0m[35;1m                [0m[39;1m$this[0m[35;1m->[0m[39;1mgetNameWithReadWriteType[0m[35;1m(),[0m
+    [90m840[0m[90m▕ [0m[35;1m                [0m[39;1m$query[0m[35;1m,[0m
+    [90m841[0m[90m▕ [0m[35;1m                [0m[39;1m$this[0m[35;1m->[0m[39;1mprepareBindings[0m[35;1m([0m[39;1m$bindings[0m[35;1m),[0m
+    [90m842[0m[90m▕ [0m[35;1m                [0m[39;1m$e[0m[35;1m,[0m
+
+      [2m+9 vendor frames [22m
+
+  [33m10  [39m[39;1mdatabase/migrations/2026_04_16_133532_add_email_hash_to_teachers.php[39;22m:[39;1m14[39;22m
+  [90m    Illuminate\Support\Facades\Facade::__callStatic("table")[39m
+      [2m+27 vendor frames [22m
+
+  [33m38  [39m[39;1martisan[39;22m:[39;1m16[39;22m
+  [90m    Illuminate\Foundation\Application::handleCommand(Object(Symfony\Component\Console\Input\ArgvInput))[39m
+
+usuario@pc73-98:/opt/lampp/htdocs/Control_Servicio$ php artisan migrate
+
+  [37;44m INFO [39;49m Running migrations.  
+
+  2026_04_16_133532_add_email_hash_to_teachers [90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m 494.03ms[39m [31;1mFAIL[39;22m
+
+  [41;1m Illuminate\Database\QueryException [49;22m
+
+[39;1m  SQLSTATE[25P02]: In failed sql transaction: 7 ERROR:  current transaction is aborted, commands ignored until end of transaction block (Connection: pgsql, Host: aws-1-eu-west-2.pooler.supabase.com, Port: 6543, Database: postgres, SQL: alter table "teachers" add column "email_hash" varchar(255) null)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m838[39m
+    [90m834[0m[90m▕ [0m[35;1m            [0m[39;1m$exceptionType [0m[35;1m= [0m[39;1m$this[0m[35;1m->[0m[39;1misUniqueConstraintError[0m[35;1m([0m[39;1m$e[0m[35;1m)[0m
+    [90m835[0m[90m▕ [0m[35;1m                ? [0m[39;1mUniqueConstraintViolationException[0m[35;1m::class[0m
+    [90m836[0m[90m▕ [0m[35;1m                : [0m[39;1mQueryException[0m[35;1m::class;[0m
+    [90m837[0m[90m▕ [0m
+[31;1m  ➜ [0m[3;1m838[0m[90m▕ [0m[35;1m            throw new [0m[39;1m$exceptionType[0m[35;1m([0m
+    [90m839[0m[90m▕ [0m[35;1m                [0m[39;1m$this[0m[35;1m->[0m[39;1mgetNameWithReadWriteType[0m[35;1m(),[0m
+    [90m840[0m[90m▕ [0m[35;1m                [0m[39;1m$query[0m[35;1m,[0m
+    [90m841[0m[90m▕ [0m[35;1m                [0m[39;1m$this[0m[35;1m->[0m[39;1mprepareBindings[0m[35;1m([0m[39;1m$bindings[0m[35;1m),[0m
+    [90m842[0m[90m▕ [0m[35;1m                [0m[39;1m$e[0m[35;1m,[0m
+
+      [2m+9 vendor frames [22m
+
+  [33m10  [39m[39;1mdatabase/migrations/2026_04_16_133532_add_email_hash_to_teachers.php[39;22m:[39;1m14[39;22m
+  [90m    Illuminate\Support\Facades\Facade::__callStatic("table")[39m
+      [2m+27 vendor frames [22m
+
+  [33m38  [39m[39;1martisan[39;22m:[39;1m16[39;22m
+  [90m    Illuminate\Foundation\Application::handleCommand(Object(Symfony\Component\Console\Input\ArgvInput))[39m
+
+usuario@pc73-98:/opt/lampp/htdocs/Control_Servicio$ php artisan migrate:reset
+
+  [37;44m INFO [39;49m Rolling back migrations.  
+
+  2026_04_16_115728_add_password_to_teachers_table [90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m 491.65ms[39m [32;1mDONE[39;22m
+  2026_03_18_084623_create_settings_table [90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m 510.12ms[39m [32;1mDONE[39;22m
+  2026_02_13_000007_create_bathroom_permissions_table [90m.[39m[90m.[39m[90m.[39m[90m 510.81ms[39m [32;1mDONE[39;22m
+  2026_02_13_000006_create_teachers_table [90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m 510.69ms[39m [32;1mDONE[39;22m
+  2026_02_13_000005_create_alumns_table [90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m 510.54ms[39m [32;1mDONE[39;22m
+  2026_02_13_000004_create_courses_table [90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m 510.36ms[39m [32;1mDONE[39;22m
+  0001_01_01_000002_create_jobs_table [90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m 1s[39m [32;1mDONE[39;22m
+  0001_01_01_000001_create_cache_table [90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m 819.46ms[39m [32;1mDONE[39;22m
+  0001_01_01_000000_create_users_table [90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m 1s[39m [32;1mDONE[39;22m
+
+usuario@pc73-98:/opt/lampp/htdocs/Control_Servicio$ php artisan migrate:status
+
+  [90mMigration name[39m [90m.......................................[39m [90mBatch / Status[39m  
+  0001_01_01_000000_create_users_table [90m........................[39m [33;1mPending[39;22m  
+  0001_01_01_000001_create_cache_table [90m........................[39m [33;1mPending[39;22m  
+  0001_01_01_000002_create_jobs_table [90m.........................[39m [33;1mPending[39;22m  
+  2026_02_13_000004_create_courses_table [90m......................[39m [33;1mPending[39;22m  
+  2026_02_13_000005_create_alumns_table [90m.......................[39m [33;1mPending[39;22m  
+  2026_02_13_000006_create_teachers_table [90m.....................[39m [33;1mPending[39;22m  
+  2026_02_13_000007_create_bathroom_permissions_table [90m.........[39m [33;1mPending[39;22m  
+  2026_03_18_084623_create_settings_table [90m.....................[39m [33;1mPending[39;22m  
+  2026_04_16_115728_add_password_to_teachers_table [90m............[39m [33;1mPending[39;22m  
+  2026_04_16_133532_add_email_hash_to_teachers [90m................[39m [33;1mPending[39;22m  
+
+usuario@pc73-98:/opt/lampp/htdocs/Control_Servicio$ php artisan migrate
+
+  [37;44m INFO [39;49m Running migrations.  
+
+  0001_01_01_000000_create_users_table [90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m 2s[39m [32;1mDONE[39;22m
+  0001_01_01_000001_create_cache_table [90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m 2s[39m [32;1mDONE[39;22m
+  0001_01_01_000002_create_jobs_table [90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m 1s[39m [32;1mDONE[39;22m
+  2026_02_13_000004_create_courses_table [90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m 612.39ms[39m [32;1mDONE[39;22m
+  2026_02_13_000005_create_alumns_table [90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m 822.83ms[39m [32;1mDONE[39;22m
+  2026_02_13_000006_create_teachers_table [90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m 818.34ms[39m [32;1mDONE[39;22m
+  2026_02_13_000007_create_bathroom_permissions_table [90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m 1s[39m [32;1mDONE[39;22m
+  2026_03_18_084623_create_settings_table [90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m 818.96ms[39m [32;1mDONE[39;22m
+  2026_04_16_115728_add_password_to_teachers_table [90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m 510.58ms[39m [32;1mDONE[39;22m
+  2026_04_16_133532_add_email_hash_to_teachers [90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m 504.96ms[39m [32;1mDONE[39;22m
+
+usuario@pc73-98:/opt/lampp/htdocs/Control_Servicio$ php artisan migrate:fresh --seed
+
+  Dropping all tables [90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m 612.49ms[39m [32;1mDONE[39;22m
+
+  [37;44m INFO [39;49m Preparing database.  
+
+  Creating migration table [90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m 512.02ms[39m [32;1mDONE[39;22m
+
+  [37;44m INFO [39;49m Running migrations.  
+
+  0001_01_01_000000_create_users_table [90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m 2s[39m [32;1mDONE[39;22m
+  0001_01_01_000001_create_cache_table [90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m 2s[39m [32;1mDONE[39;22m
+  0001_01_01_000002_create_jobs_table [90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m 2s[39m [32;1mDONE[39;22m
+  2026_02_13_000004_create_courses_table [90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m 476.39ms[39m [32;1mDONE[39;22m
+  2026_02_13_000005_create_alumns_table [90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m 818.88ms[39m [32;1mDONE[39;22m
+  2026_02_13_000006_create_teachers_table [90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m 818.48ms[39m [32;1mDONE[39;22m
+  2026_02_13_000007_create_bathroom_permissions_table [90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m 1s[39m [32;1mDONE[39;22m
+  2026_03_18_084623_create_settings_table [90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m 774.67ms[39m [32;1mDONE[39;22m
+  2026_04_16_115728_add_password_to_teachers_table [90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m 510.62ms[39m [32;1mDONE[39;22m
+  2026_04_16_133532_add_email_hash_to_teachers [90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m 510.75ms[39m [32;1mDONE[39;22m
+
+
+  [37;44m INFO [39;49m Seeding database.  
+
+  Database\Seeders\TeacherSeeder [90m..............................[39m [33;1mRUNNING[39;22m  
+  Database\Seeders\TeacherSeeder [90m.......................[39m [90m32,351 ms[39m [32;1mDONE[39;22m  
+
+  Database\Seeders\AlumnSeeder [90m................................[39m [33;1mRUNNING[39;22m  
+
+  [41;1m Illuminate\Database\QueryException [49;22m
+
+[39;1m  SQLSTATE[26000]: Invalid sql statement name: 7 ERROR:  prepared statement "pdo_stmt_000000b4" does not exist (Connection: pgsql, Host: aws-1-eu-west-2.pooler.supabase.com, Port: 6543, Database: postgres, SQL: insert into "courses" ("name", "created_at", "updated_at") values (2 IF-NO DUAL, 2026-04-16 13:46:39, 2026-04-16 13:46:39) returning "id")[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m838[39m
+    [90m834[0m[90m▕ [0m[35;1m            [0m[39;1m$exceptionType [0m[35;1m= [0m[39;1m$this[0m[35;1m->[0m[39;1misUniqueConstraintError[0m[35;1m([0m[39;1m$e[0m[35;1m)[0m
+    [90m835[0m[90m▕ [0m[35;1m                ? [0m[39;1mUniqueConstraintViolationException[0m[35;1m::class[0m
+    [90m836[0m[90m▕ [0m[35;1m                : [0m[39;1mQueryException[0m[35;1m::class;[0m
+    [90m837[0m[90m▕ [0m
+[31;1m  ➜ [0m[3;1m838[0m[90m▕ [0m[35;1m    
