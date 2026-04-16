@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Models\BathroomPermission;
 use App\Services\GoogleSheetsService;
+use App\Models\Setting;
 
 class ExportAndCleanPermissions extends Command
 {
@@ -19,11 +20,11 @@ class ExportAndCleanPermissions extends Command
 
         // 1️⃣ Actualizar permisos vencidos
         BathroomPermission::whereNull('returned_at')
-            ->where('created_at', '<=', now()->subMinutes(10))
+            ->where('created_at', '<=', now()->subMinutes(Setting::get('permission_duration_minutes', 15)))
             ->get()
             ->each(function ($permission) {
                 $permission->update([
-                    'returned_at' => $permission->created_at->copy()->addMinutes(10)
+                    'returned_at' => $permission->created_at->copy()->addMinutes(Setting::get('permission_duration_minutes', 15))
                 ]);
             });
 

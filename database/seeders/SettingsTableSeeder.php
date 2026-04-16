@@ -22,5 +22,10 @@ class SettingsTableSeeder extends Seeder
             ['key' => 'max_daily_per_alumn'],
             ['value' => '3']
         );
+
+        DB::table('settings')->updateOrInsert(
+            ['key' => 'permission_duration_minutes'],
+            ['value' => '15']
+        );
     }
 }

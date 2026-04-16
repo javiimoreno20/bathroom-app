@@ -12,6 +12,7 @@ class SettingsController extends Controller
         $request->validate([
             'max_permissions' => 'required|integer|min:1',
             'max_daily_per_alumn' => 'required|integer|min:1',
+            'permission_duration_minutes' => 'required|integer|min:1',
         ]);
 
         Setting::updateOrCreate(
@@ -22,6 +23,11 @@ class SettingsController extends Controller
         Setting::updateOrCreate(
             ['key' => 'max_daily_per_alumn'],
             ['value' => $request->max_daily_per_alumn]
+        );
+
+        Setting::updateOrCreate(
+            ['key' => 'permission_duration_minutes'],
+            ['value' => $request->permission_duration_minutes]
         );
 
         return back()->with('success', 'Configuración actualizada correctamente');

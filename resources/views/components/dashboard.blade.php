@@ -139,6 +139,10 @@
             <label>Máximo diario por alumno:</label>
             <input type="number" name="max_daily_per_alumn" value="{{ $maxDailyPerAlumn }}">
 
+            <label>Duración permiso (minutos):</label>
+            <input type="number" name="permission_duration_minutes" value="{{ $permissionDuration }}">
+
+
             <br><br>
             <button type="submit">Guardar</button>
         </form>

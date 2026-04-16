@@ -15,12 +15,14 @@ class BathroomPermissionController extends Controller
     //
     public function index(Request $request) {
 
-        //Filtro para permisos activos y comprueba si llevan más de 10 minutos, si lo lleva se actualiza el returned_at de null a la fecha actual.
-        BathroomPermission::whereNull('returned_at')->where('created_at', '<=', now()->subMinutes(10))->get()->each(function($permission) {
+        //Filtro para permisos activos y comprueba si llevan más de 15 minutos, si lo lleva se actualiza el returned_at de null a la fecha actual.
+        BathroomPermission::whereNull('returned_at')->where('created_at', '<=', now()->subMinutes(Setting::get('permission_duration_minutes', 15)))->get()->each(function($permission) {
             $permission->update([
-                'returned_at' => $permission->created_at->copy()->addMinutes(10)
+                'returned_at' => $permission->created_at->copy()->addMinutes(Setting::get('permission_duration_minutes', 15))
             ]);
         });
+
+        $permissionDuration = Setting::get('permission_duration_minutes', 15);
 
         //Guarda en una variable todos los permisos que tengan null en returned_at y el profesor que haya creado el permiso.
         $activePermissions = BathroomPermission::whereNull('returned_at')->with('teacher', 'alumn')->get();
@@ -47,7 +49,7 @@ class BathroomPermissionController extends Controller
 
         // En tu BathroomPermissionController@index
         return response()
-            ->view('dashboard', compact('currentCount', 'activePermissions', 'courses', 'alumns', 'courseId', 'salidasHoy', 'maxPermissions', 'maxDailyPerAlumn'))
+            ->view('dashboard', compact('currentCount', 'activePermissions', 'courses', 'alumns', 'courseId', 'salidasHoy', 'maxPermissions', 'maxDailyPerAlumn', 'permissionDuration'))
             ->header('Cache-Control', 'no-cache, no-store, max-age=0, must-revalidate')
             ->header('Pragma', 'no-cache')
             ->header('Expires', 'Sat, 01 Jan 1990 00:00:00 GMT');
@@ -84,10 +86,10 @@ class BathroomPermissionController extends Controller
             abort(403);
         }
 
-        // ⛔ Si ya pasaron 10 minutos, forzar hora correcta
-        if ($permission->created_at->addMinutes(10)->isPast()) {
+        // ⛔ Si ya pasaron 15 minutos, forzar hora correcta
+        if ($permission->created_at->addMinutes(Setting::get('permission_duration_minutes', 15))->isPast()) {
             $permission->update([
-                'returned_at' => $permission->created_at->copy()->addMinutes(10)
+                'returned_at' => $permission->created_at->copy()->addMinutes(Setting::get('permission_duration_minutes', 15))
             ]);
         } else {
             // ✅ Si está dentro de tiempo, guardar hora real
@@ -114,9 +116,9 @@ class BathroomPermissionController extends Controller
         $spreadsheetId = '16IT-sjzeoA1-Is2gH94N0YJTPLvZfJmDRq4Vvs0yBcc';
 
         // 1️⃣ Actualizar permisos vencidos antes de exportar
-        BathroomPermission::whereNull('returned_at')->where('created_at', '<=', now()->subMinutes(10))->get()->each(function($permission) {
+        BathroomPermission::whereNull('returned_at')->where('created_at', '<=', now()->subMinutes(Setting::get('permission_duration_minutes', 15)))->get()->each(function($permission) {
                 $permission->update([
-                    'returned_at' => $permission->created_at->copy()->addMinutes(10)
+                    'returned_at' => $permission->created_at->copy()->addMinutes(Setting::get('permission_duration_minutes', 15))
                 ]);
             });
 
