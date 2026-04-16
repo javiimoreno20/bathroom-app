@@ -41,7 +41,10 @@ class TeacherController extends Controller
         Teacher::create([
             'full_name' => $request->full_name,
             'email' => $request->email,
-            'is_admin' => $request->has('is_admin'), // true o false
+            'is_admin' => $request->has('is_admin'),
+            'password' => $request->has('is_admin')
+                ? Teacher::DEFAULT_ADMIN_PASSWORD
+                : null,
         ]);
 
         return redirect()->route('teachers.index');
@@ -70,18 +73,44 @@ class TeacherController extends Controller
             'email' => 'required|string|max:255|unique:teachers,email,' . $id,
         ]);
 
+        $wasAdmin = $teacher->is_admin;
+
         $teacher->update([
             'full_name' => $request->full_name,
             'email' => $request->email,
             'is_admin' => $request->is_admin,
         ]);
 
+        // Si ahora es admin y antes no lo era → asignar password por defecto
+        if ($request->has('is_admin') && !$teacher->fresh()->password) {
+            $teacher->update([
+                'password' => Teacher::DEFAULT_ADMIN_PASSWORD
+            ]);
+        }
+
         // Si el profesor editado es el que está logueado, actualizar la sesión
         if (session('profesor') && session('profesor')->id == $teacher->id) {
-            session()->put('profesor', $teacher);
+            session()->put('profesor', $teacher->fresh());
         }
 
         return redirect()->route('teachers.index');
+    }
+
+    public function changePassword(Request $request)
+    {
+        $request->validate([
+            'password' => 'required|string|min:4'
+        ]);
+
+        $teacher = Teacher::findOrFail(session('profesor')->id);
+
+        $teacher->update([
+            'password' => $request->password
+        ]);
+
+        session(['profesor' => $teacher->fresh()]);
+
+        return back()->with('success', 'Contraseña actualizada');
     }
 
     /**

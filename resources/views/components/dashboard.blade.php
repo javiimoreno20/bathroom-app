@@ -76,15 +76,25 @@
 
     <h3>Permisos activos:</h3>
     @foreach($activePermissions as $permission)
-        <div style="margin-bottom: 10px;">
-            Profesor: {{ $permission->teacher->full_name }}
-            | Alumno: {{ $permission->alumn?->full_name ?? 'Sin alumno' }}
-            | Salió hace: {{ $permission->created_at->diffForHumans() }}
+        <div style="margin-bottom: 15px; font-size: 18px;">
+
+            <div>
+                <strong>Profesor:</strong> {{ $permission->teacher->full_name }}
+            </div>
+
+            <div>
+                <strong>Alumno:</strong> {{ $permission->alumn?->full_name ?? 'Sin alumno' }}
+            </div>
+
+            <div>
+                Salió hace: {{ $permission->created_at->diffForHumans() }}
+            </div>
 
             <form method="POST" action="{{ route('mark.returned', $permission->id) }}" style="display:inline;">
                 @csrf
                 <button type="submit">Ha regresado</button>
             </form>
+
         </div>
     @endforeach
 
@@ -148,6 +158,16 @@
         </form>
 
         <br><br>
+
+        <h2>Cambiar contraseña</h2>
+
+        <form method="POST" action="{{ route('teachers.change-password') }}">
+            @csrf
+
+            <input type="password" name="password" placeholder="Nueva contraseña">
+
+            <button type="submit">Cambiar</button>
+        </form>
     @endif
 
     <br><br>

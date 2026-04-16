@@ -10,7 +10,15 @@ class TeacherAuth
     public function handle(Request $request, Closure $next)
     {
         if (!session()->has('profesor')) {
-            return redirect('/login');
+
+            if (
+                session()->has('pending_admin_id') &&
+                !$request->routeIs('login.password')
+            ) {
+                return redirect()->route('login.password');
+            }
+
+            return redirect()->route('login');
         }
 
         return $next($request);

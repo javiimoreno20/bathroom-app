@@ -38,17 +38,21 @@ class importController extends Controller
 
                     foreach ($rows as $row) {
 
-                        logger('Importando teacher', $row);
+                        $email = trim($row['email']);
 
-                        Teacher::updateOrCreate(
-                            ['email' => trim($row['email'])],
-                            [
-                                'full_name' => trim($row['full_name']),
-                                'is_admin' => !empty($row['is_admin'] ?? false),
-                                'created_at' => now(),
-                                'updated_at' => now(),
-                            ]
-                        );
+                        $teacher = Teacher::create([
+                            'full_name' => trim($row['full_name']),
+                            'email' => $email,
+                            'is_admin' => !empty($row['is_admin'] ?? false),
+
+                            // 🔐 contraseña solo si es admin
+                            'password' => ($row['is_admin'] ?? false)
+                                ? Teacher::DEFAULT_ADMIN_PASSWORD
+                                : null,
+
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ]);
                     }
 
                 } elseif ($type === 'alumns') {

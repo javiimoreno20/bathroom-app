@@ -24,18 +24,68 @@ class AuthController extends Controller
             'email' => ['required', 'email'],
         ]);
 
-        $profesor = Teacher::all()->first(fn($t) => $t->email === $validated['email']);
+        $profesor = Teacher::where('email', $validated['email'])->first();
 
-        if ($profesor) {
+        if (!$profesor) {
+            return back()->withErrors([
+                'email' => 'Profesor no registrado.',
+            ]);
+        }
+
+        // 👇 SI NO ES ADMIN → LOGIN DIRECTO
+        if (!$profesor->is_admin) {
             $request->session()->regenerate();
             $request->session()->put('profesor', $profesor);
-
             return redirect()->route('dashboard');
         }
 
-        return back()->withErrors([
-            'email' => 'Profesor no registrado.',
+        // 👇 SI ES ADMIN → GUARDAR TEMP Y IR A PASSWORD
+        $request->session()->regenerate();
+        $request->session()->put('pending_admin_id', $profesor->id);
+
+        return redirect()->route('login.password');
+    }
+
+    public function showPassword()
+    {
+        if (!session()->has('pending_admin_id')) {
+            return redirect()->route('login');
+        }
+
+        $teacher = Teacher::find(session('pending_admin_id'));
+
+        if (!$teacher || !$teacher->is_admin) {
+            return redirect()->route('login');
+        }
+
+        return view('auth.admin-password');
+    }
+
+    public function checkPassword(Request $request)
+    {
+        $request->validate([
+            'password' => ['required', 'string']
         ]);
+
+        $teacher = Teacher::find(session('pending_admin_id'));
+
+        if (!$teacher) {
+            return redirect()->route('login');
+        }
+
+        if (!\Illuminate\Support\Facades\Hash::check($request->password, $teacher->password)) {
+            return back()->withErrors([
+                'password' => 'Contraseña incorrecta'
+            ]);
+        }
+
+        session()->forget('pending_admin_id');
+
+        $request->session()->regenerate();
+
+        $request->session()->put('profesor', $teacher);
+
+        return redirect()->route('dashboard');
     }
 
     /**
