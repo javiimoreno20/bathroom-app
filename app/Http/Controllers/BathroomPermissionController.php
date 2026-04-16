@@ -13,48 +13,59 @@ use App\Models\Setting;
 class BathroomPermissionController extends Controller
 {
     //
-    public function index(Request $request) {
+    public function index(Request $request)
+    {
+        $minutes = (int) Setting::get('permission_duration_minutes', 15);
 
-        //Filtro para permisos activos y comprueba si llevan más de 15 minutos, si lo lleva se actualiza el returned_at de null a la fecha actual.
-        BathroomPermission::whereNull('returned_at')->where('created_at', '<=', now()->subMinutes(Setting::get('permission_duration_minutes', 15)))->get()->each(function($permission) {
-            $permission->update([
-                'returned_at' => $permission->created_at->copy()->addMinutes(Setting::get('permission_duration_minutes', 15))
-            ]);
-        });
+        BathroomPermission::whereNull('returned_at')
+            ->where('created_at', '<=', now()->subMinutes($minutes))
+            ->get()
+            ->each(function ($permission) use ($minutes) {
+                $permission->update([
+                    'returned_at' => $permission->created_at->copy()->addMinutes($minutes)
+                ]);
+            });
 
-        $permissionDuration = Setting::get('permission_duration_minutes', 15);
+        $permissionDuration = $minutes;
 
-        //Guarda en una variable todos los permisos que tengan null en returned_at y el profesor que haya creado el permiso.
-        $activePermissions = BathroomPermission::whereNull('returned_at')->with('teacher', 'alumn')->get();
+        $activePermissions = BathroomPermission::whereNull('returned_at')
+            ->with('teacher', 'alumn')
+            ->get();
 
-        //Cuenta todos los permisos que hay activos actualmente.
         $currentCount = $activePermissions->count();
 
         $maxPermissions = Setting::get('max_permissions', 5);
+        $maxDailyPerAlumn = Setting::get('max_daily_per_alumn', 3);
 
-        $maxDailyPerAlumn   = Setting::get('max_daily_per_alumn', 3);
-
-        //Guardo en una variable todos los cursos.
         $courses = Course::all();
-
         $alumns = collect();
 
         $courseId = $request->course_id ?? null;
-        
+
         if ($request->filled('course_id')) {
             $alumns = Alumn::where('course_id', $courseId)->get();
         }
 
-        $salidasHoy = BathroomPermission::whereDate('created_at', now())->selectRaw('alumn_id, COUNT(*) as total')->groupBy('alumn_id')->pluck('total', 'alumn_id');
+        $salidasHoy = BathroomPermission::whereDate('created_at', now())
+            ->selectRaw('alumn_id, COUNT(*) as total')
+            ->groupBy('alumn_id')
+            ->pluck('total', 'alumn_id');
 
-        // En tu BathroomPermissionController@index
         return response()
-            ->view('dashboard', compact('currentCount', 'activePermissions', 'courses', 'alumns', 'courseId', 'salidasHoy', 'maxPermissions', 'maxDailyPerAlumn', 'permissionDuration'))
+            ->view('dashboard', compact(
+                'currentCount',
+                'activePermissions',
+                'courses',
+                'alumns',
+                'courseId',
+                'salidasHoy',
+                'maxPermissions',
+                'maxDailyPerAlumn',
+                'permissionDuration'
+            ))
             ->header('Cache-Control', 'no-cache, no-store, max-age=0, must-revalidate')
             ->header('Pragma', 'no-cache')
             ->header('Expires', 'Sat, 01 Jan 1990 00:00:00 GMT');
-
-        //Devuelve una vista enviándole la información de la cantidad de permisos activos actualmente y la información de cada permiso con la id del profesor que ha creado dicho permiso.
     }
 
     public function givePermission(Request $request) {
@@ -75,30 +86,30 @@ class BathroomPermissionController extends Controller
         return redirect()->route('dashboard')->with('success', 'Permiso concedido');
     }
 
-    public function markReturned($id) {
-        $profesor = session('profesor'); // trae el profesor de la sesión
-        
-        //Guarda en una variable un permiso con la id solicitada.
+    public function markReturned($id)
+    {
+        $minutes = (int) Setting::get('permission_duration_minutes', 15);
+
+        $profesor = session('profesor');
+
         $permission = BathroomPermission::findOrFail($id);
 
-        //Compara si el profesor logueado que esta intentando borrar un permiso es el mismo que lo ha creado, si no es el mismo salta un error de permisos y corta la ejecución.
         if ($permission->teacher_id !== $profesor->id) {
             abort(403);
         }
 
-        // ⛔ Si ya pasaron 15 minutos, forzar hora correcta
-        if ($permission->created_at->addMinutes(Setting::get('permission_duration_minutes', 15))->isPast()) {
+        $limitTime = $permission->created_at->copy()->addMinutes($minutes);
+
+        if ($limitTime->isPast()) {
             $permission->update([
-                'returned_at' => $permission->created_at->copy()->addMinutes(Setting::get('permission_duration_minutes', 15))
+                'returned_at' => $limitTime
             ]);
         } else {
-            // ✅ Si está dentro de tiempo, guardar hora real
             $permission->update([
                 'returned_at' => now()
             ]);
         }
 
-        //Vuelve al index
         return back();
     }
 
@@ -111,19 +122,23 @@ class BathroomPermissionController extends Controller
 
     public function exportPermissions()
     {
-        $sheetService = new GoogleSheetsService();
+        $minutes = (int) Setting::get('permission_duration_minutes', 15);
 
+        $sheetService = new GoogleSheetsService();
         $spreadsheetId = '16IT-sjzeoA1-Is2gH94N0YJTPLvZfJmDRq4Vvs0yBcc';
 
-        // 1️⃣ Actualizar permisos vencidos antes de exportar
-        BathroomPermission::whereNull('returned_at')->where('created_at', '<=', now()->subMinutes(Setting::get('permission_duration_minutes', 15)))->get()->each(function($permission) {
+        BathroomPermission::whereNull('returned_at')
+            ->where('created_at', '<=', now()->subMinutes($minutes))
+            ->get()
+            ->each(function ($permission) use ($minutes) {
                 $permission->update([
-                    'returned_at' => $permission->created_at->copy()->addMinutes(Setting::get('permission_duration_minutes', 15))
+                    'returned_at' => $permission->created_at->copy()->addMinutes($minutes)
                 ]);
             });
 
-        // 2️⃣ Obtener todos los permisos con relaciones
-        $permissions = BathroomPermission::with('teacher','alumn')->orderBy('created_at')->get();
+        $permissions = BathroomPermission::with('teacher','alumn')
+            ->orderBy('created_at')
+            ->get();
 
         $rows = [];
 

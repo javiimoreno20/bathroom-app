@@ -14,21 +14,20 @@ class ExportAndCleanPermissions extends Command
 
     public function handle()
     {
-        $sheetService = new GoogleSheetsService();
+        $minutes = (int) Setting::get('permission_duration_minutes', 15);
 
+        $sheetService = new GoogleSheetsService();
         $spreadsheetId = '16IT-sjzeoA1-Is2gH94N0YJTPLvZfJmDRq4Vvs0yBcc';
 
-        // 1️⃣ Actualizar permisos vencidos
         BathroomPermission::whereNull('returned_at')
-            ->where('created_at', '<=', now()->subMinutes(Setting::get('permission_duration_minutes', 15)))
+            ->where('created_at', '<=', now()->subMinutes($minutes))
             ->get()
-            ->each(function ($permission) {
+            ->each(function ($permission) use ($minutes) {
                 $permission->update([
-                    'returned_at' => $permission->created_at->copy()->addMinutes(Setting::get('permission_duration_minutes', 15))
+                    'returned_at' => $permission->created_at->copy()->addMinutes($minutes)
                 ]);
             });
 
-        // 2️⃣ Obtener todos los permisos
         $permissions = BathroomPermission::with('teacher', 'alumn')
             ->orderBy('created_at')
             ->get();
@@ -44,14 +43,12 @@ class ExportAndCleanPermissions extends Command
             ];
         }
 
-        // 3️⃣ Exportar a Google Sheets
         $sheetService->writeSheetData(
             $spreadsheetId,
             'bathroom_permissions!A:D',
             $rows
         );
 
-        // 4️⃣ BORRAR TODO EL HISTORIAL
         BathroomPermission::truncate();
 
         $this->info('Permisos exportados y base de datos limpiada correctamente.');
