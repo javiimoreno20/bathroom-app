@@ -31,7 +31,11 @@ Route::get('/', function () {
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
+Route::get('/login/password', [AuthController::class, 'showPassword'])
+    ->name('login.password');
 
+Route::post('/login/password', [AuthController::class, 'checkPassword'])
+    ->name('login.password.check');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 /*
