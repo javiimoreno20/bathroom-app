@@ -15,7 +15,7 @@
 
     <a href="{{ route('dashboard') }}">
         <button type="button">
-            Volver al dashboard
+            Volver a la página principal
         </button>
     </a>
 
